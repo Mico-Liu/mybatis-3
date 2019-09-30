@@ -119,7 +119,8 @@ public class Configuration {
   protected Class<? extends VFS> vfsImpl;
   protected LocalCacheScope localCacheScope = LocalCacheScope.SESSION;
   protected JdbcType jdbcTypeForNull = JdbcType.OTHER;
-  protected Set<String> lazyLoadTriggerMethods = new HashSet<>(Arrays.asList("equals", "clone", "hashCode", "toString"));
+  protected Set<String> lazyLoadTriggerMethods = new HashSet<>(
+      Arrays.asList("equals", "clone", "hashCode", "toString"));
   protected Integer defaultStatementTimeout;
   protected Integer defaultFetchSize;
   protected ResultSetType defaultResultSetType;
@@ -137,8 +138,7 @@ public class Configuration {
 
   protected String databaseId;
   /**
-   * Configuration factory class.
-   * Used to create Configuration for loading deserialized unread properties.
+   * Configuration factory class. Used to create Configuration for loading deserialized unread properties.
    *
    * @see <a href='https://code.google.com/p/mybatis/issues/detail?id=300'>Issue 300 (google code)</a>
    */
@@ -150,9 +150,10 @@ public class Configuration {
   protected final TypeAliasRegistry typeAliasRegistry = new TypeAliasRegistry();
   protected final LanguageDriverRegistry languageRegistry = new LanguageDriverRegistry();
 
-  protected final Map<String, MappedStatement> mappedStatements = new StrictMap<MappedStatement>("Mapped Statements collection")
-      .conflictMessageProducer((savedValue, targetValue) ->
-          ". please check " + savedValue.getResource() + " and " + targetValue.getResource());
+  protected final Map<String, MappedStatement> mappedStatements = new StrictMap<MappedStatement>(
+      "Mapped Statements collection")
+          .conflictMessageProducer((savedValue, targetValue) -> ". please check " + savedValue.getResource() + " and "
+              + targetValue.getResource());
   protected final Map<String, Cache> caches = new StrictMap<>("Caches collection");
   protected final Map<String, ResultMap> resultMaps = new StrictMap<>("Result Maps collection");
   protected final Map<String, ParameterMap> parameterMaps = new StrictMap<>("Parameter Maps collection");
@@ -167,9 +168,8 @@ public class Configuration {
   protected final Collection<MethodResolver> incompleteMethods = new LinkedList<>();
 
   /*
-   * A map holds cache-ref relationship. The key is the namespace that
-   * references a cache bound to another namespace and the value is the
-   * namespace which the actual cache is bound to.
+   * A map holds cache-ref relationship. The key is the namespace that references a cache bound to another namespace and
+   * the value is the namespace which the actual cache is bound to.
    */
   protected final Map<String, String> cacheRefMap = new HashMap<>();
 
@@ -484,9 +484,11 @@ public class Configuration {
   }
 
   /**
-   * Set a default {@link TypeHandler} class for {@link Enum}.
-   * A default {@link TypeHandler} is {@link org.apache.ibatis.type.EnumTypeHandler}.
-   * @param typeHandler a type handler class for {@link Enum}
+   * Set a default {@link TypeHandler} class for {@link Enum}. A default {@link TypeHandler} is
+   * {@link org.apache.ibatis.type.EnumTypeHandler}.
+   * 
+   * @param typeHandler
+   *          a type handler class for {@link Enum}
    * @since 3.4.5
    */
   public void setDefaultEnumTypeHandler(Class<? extends TypeHandler> typeHandler) {
@@ -575,21 +577,26 @@ public class Configuration {
     return MetaObject.forObject(object, objectFactory, objectWrapperFactory, reflectorFactory);
   }
 
-  public ParameterHandler newParameterHandler(MappedStatement mappedStatement, Object parameterObject, BoundSql boundSql) {
-    ParameterHandler parameterHandler = mappedStatement.getLang().createParameterHandler(mappedStatement, parameterObject, boundSql);
+  public ParameterHandler newParameterHandler(MappedStatement mappedStatement, Object parameterObject,
+      BoundSql boundSql) {
+    ParameterHandler parameterHandler = mappedStatement.getLang().createParameterHandler(mappedStatement,
+        parameterObject, boundSql);
     parameterHandler = (ParameterHandler) interceptorChain.pluginAll(parameterHandler);
     return parameterHandler;
   }
 
-  public ResultSetHandler newResultSetHandler(Executor executor, MappedStatement mappedStatement, RowBounds rowBounds, ParameterHandler parameterHandler,
-      ResultHandler resultHandler, BoundSql boundSql) {
-    ResultSetHandler resultSetHandler = new DefaultResultSetHandler(executor, mappedStatement, parameterHandler, resultHandler, boundSql, rowBounds);
+  public ResultSetHandler newResultSetHandler(Executor executor, MappedStatement mappedStatement, RowBounds rowBounds,
+      ParameterHandler parameterHandler, ResultHandler resultHandler, BoundSql boundSql) {
+    ResultSetHandler resultSetHandler = new DefaultResultSetHandler(executor, mappedStatement, parameterHandler,
+        resultHandler, boundSql, rowBounds);
     resultSetHandler = (ResultSetHandler) interceptorChain.pluginAll(resultSetHandler);
     return resultSetHandler;
   }
 
-  public StatementHandler newStatementHandler(Executor executor, MappedStatement mappedStatement, Object parameterObject, RowBounds rowBounds, ResultHandler resultHandler, BoundSql boundSql) {
-    StatementHandler statementHandler = new RoutingStatementHandler(executor, mappedStatement, parameterObject, rowBounds, resultHandler, boundSql);
+  public StatementHandler newStatementHandler(Executor executor, MappedStatement mappedStatement,
+      Object parameterObject, RowBounds rowBounds, ResultHandler resultHandler, BoundSql boundSql) {
+    StatementHandler statementHandler = new RoutingStatementHandler(executor, mappedStatement, parameterObject,
+        rowBounds, resultHandler, boundSql);
     statementHandler = (StatementHandler) interceptorChain.pluginAll(statementHandler);
     return statementHandler;
   }
@@ -799,9 +806,8 @@ public class Configuration {
   }
 
   /*
-   * Parses all the unprocessed statement nodes in the cache. It is recommended
-   * to call this method once all the mappers are added as it provides fail-fast
-   * statement validation.
+   * Parses all the unprocessed statement nodes in the cache. It is recommended to call this method once all the mappers
+   * are added as it provides fail-fast statement validation.
    */
   protected void buildAllStatements() {
     parsePendingResultMaps();
@@ -874,7 +880,8 @@ public class Configuration {
         if (value instanceof ResultMap) {
           ResultMap entryResultMap = (ResultMap) value;
           if (!entryResultMap.hasNestedResultMaps() && entryResultMap.getDiscriminator() != null) {
-            Collection<String> discriminatedResultMapNames = entryResultMap.getDiscriminator().getDiscriminatorMap().values();
+            Collection<String> discriminatedResultMapNames = entryResultMap.getDiscriminator().getDiscriminatorMap()
+                .values();
             if (discriminatedResultMapNames.contains(rm.getId())) {
               entryResultMap.forceNestedResultMaps();
             }
@@ -930,7 +937,9 @@ public class Configuration {
      * Assign a function for producing a conflict error message when contains value with the same key.
      * <p>
      * function arguments are 1st is saved value and 2nd is target value.
-     * @param conflictMessageProducer A function for producing a conflict error message
+     * 
+     * @param conflictMessageProducer
+     *          A function for producing a conflict error message
      * @return a conflict error message
      * @since 3.5.0
      */

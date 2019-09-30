@@ -268,7 +268,8 @@ public abstract class AbstractSQL<T> {
   /**
    * Set the limit variable string(e.g. {@code "#{limit}"}).
    *
-   * @param variable a limit variable string
+   * @param variable
+   *          a limit variable string
    * @return a self instance
    * @see #OFFSET(String)
    * @since 3.5.2
@@ -282,7 +283,8 @@ public abstract class AbstractSQL<T> {
   /**
    * Set the limit value.
    *
-   * @param value an offset value
+   * @param value
+   *          an offset value
    * @return a self instance
    * @see #OFFSET(long)
    * @since 3.5.2
@@ -294,7 +296,8 @@ public abstract class AbstractSQL<T> {
   /**
    * Set the offset variable string(e.g. {@code "#{offset}"}).
    *
-   * @param variable a offset variable string
+   * @param variable
+   *          a offset variable string
    * @return a self instance
    * @see #LIMIT(String)
    * @since 3.5.2
@@ -308,7 +311,8 @@ public abstract class AbstractSQL<T> {
   /**
    * Set the offset value.
    *
-   * @param value an offset value
+   * @param value
+   *          an offset value
    * @return a self instance
    * @see #LIMIT(int)
    * @since 3.5.2
@@ -320,7 +324,8 @@ public abstract class AbstractSQL<T> {
   /**
    * Set the fetch first rows variable string(e.g. {@code "#{fetchFirstRows}"}).
    *
-   * @param variable a fetch first rows variable string
+   * @param variable
+   *          a fetch first rows variable string
    * @return a self instance
    * @see #OFFSET_ROWS(String)
    * @since 3.5.2
@@ -334,7 +339,8 @@ public abstract class AbstractSQL<T> {
   /**
    * Set the fetch first rows value.
    *
-   * @param value a fetch first rows value
+   * @param value
+   *          a fetch first rows value
    * @return a self instance
    * @see #OFFSET_ROWS(long)
    * @since 3.5.2
@@ -346,7 +352,8 @@ public abstract class AbstractSQL<T> {
   /**
    * Set the offset rows variable string(e.g. {@code "#{offset}"}).
    *
-   * @param variable a offset rows variable string
+   * @param variable
+   *          a offset rows variable string
    * @return a self instance
    * @see #FETCH_FIRST_ROWS_ONLY(String)
    * @since 3.5.2
@@ -360,7 +367,8 @@ public abstract class AbstractSQL<T> {
   /**
    * Set the offset rows value.
    *
-   * @param value an offset rows value
+   * @param value
+   *          an offset rows value
    * @return a self instance
    * @see #FETCH_FIRST_ROWS_ONLY(int)
    * @since 3.5.2
@@ -371,7 +379,6 @@ public abstract class AbstractSQL<T> {
 
   /*
    * used to add a new inserted row while do multi-row insert.
-   *
    * @since 3.5.2
    */
   public T ADD_ROW() {
@@ -425,7 +432,10 @@ public abstract class AbstractSQL<T> {
   private static class SQLStatement {
 
     public enum StatementType {
-      DELETE, INSERT, SELECT, UPDATE
+      DELETE,
+      INSERT,
+      SELECT,
+      UPDATE
     }
 
     private enum LimitingRowsStrategy {
@@ -489,7 +499,7 @@ public abstract class AbstractSQL<T> {
     }
 
     private void sqlClause(SafeAppendable builder, String keyword, List<String> parts, String open, String close,
-                           String conjunction) {
+        String conjunction) {
       if (!parts.isEmpty()) {
         if (!builder.isEmpty()) {
           builder.append("\n");

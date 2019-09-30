@@ -29,13 +29,8 @@ public interface Mapper {
 
   class SqlProvider implements ProviderMethodResolver {
     public String findAll() {
-      return new SQL()
-        .SELECT("user_id", "name")
-        .FROM("${schema}users")
-        .ORDER_BY("user_id")
-        .OFFSET_ROWS("#{offset}")
-        .FETCH_FIRST_ROWS_ONLY("#{limit}")
-        .toString();
+      return new SQL().SELECT("user_id", "name").FROM("${schema}users").ORDER_BY("user_id").OFFSET_ROWS("#{offset}")
+          .FETCH_FIRST_ROWS_ONLY("#{limit}").toString();
     }
   }
 

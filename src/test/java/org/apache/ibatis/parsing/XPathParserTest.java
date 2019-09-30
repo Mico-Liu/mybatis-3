@@ -33,7 +33,7 @@ import org.xml.sax.*;
 class XPathParserTest {
   private String resource = "resources/nodelet_test.xml";
 
-  //InputStream Source
+  // InputStream Source
   @Test
   void constructorWithInputStreamValidationVariablesEntityResolver() throws Exception {
 
@@ -67,7 +67,7 @@ class XPathParserTest {
     }
   }
 
-  //Reader Source
+  // Reader Source
   @Test
   void constructorWithReaderValidationVariablesEntityResolver() throws Exception {
 
@@ -101,7 +101,7 @@ class XPathParserTest {
     }
   }
 
-  //Xml String Source
+  // Xml String Source
   @Test
   void constructorWithStringValidationVariablesEntityResolver() throws Exception {
     XPathParser parser = new XPathParser(getXmlString(resource), false, null, null);
@@ -126,7 +126,7 @@ class XPathParserTest {
     testEvalMethod(parser);
   }
 
-  //Document Source
+  // Document Source
   @Test
   void constructorWithDocumentValidationVariablesEntityResolver() {
     XPathParser parser = new XPathParser(getDocument(resource), false, null, null);
@@ -161,7 +161,7 @@ class XPathParserTest {
       factory.setCoalescing(false);
       factory.setExpandEntityReferences(true);
       DocumentBuilder builder = factory.newDocumentBuilder();
-      return builder.parse(inputSource);//already closed resource in builder.parse method
+      return builder.parse(inputSource);// already closed resource in builder.parse method
     } catch (Exception e) {
       throw new BuilderException("Error creating document instance.  Cause: " + e, e);
     }

@@ -26,9 +26,9 @@ import org.apache.ibatis.cache.CacheException;
 /**
  * Simple blocking decorator
  *
- * Simple and inefficient version of EhCache's BlockingCache decorator.
- * It sets a lock over a cache key when the element is not found in cache.
- * This way, other threads will wait until this element is filled instead of hitting the database.
+ * Simple and inefficient version of EhCache's BlockingCache decorator. It sets a lock over a cache key when the element
+ * is not found in cache. This way, other threads will wait until this element is filled instead of hitting the
+ * database.
  *
  * @author Eduardo Macarron
  *
@@ -95,7 +95,8 @@ public class BlockingCache implements Cache {
       try {
         boolean acquired = lock.tryLock(timeout, TimeUnit.MILLISECONDS);
         if (!acquired) {
-          throw new CacheException("Couldn't get a lock in " + timeout + " for the key " +  key + " at the cache " + delegate.getId());
+          throw new CacheException(
+              "Couldn't get a lock in " + timeout + " for the key " + key + " at the cache " + delegate.getId());
         }
       } catch (InterruptedException e) {
         throw new CacheException("Got interrupted while trying to acquire lock for key " + key, e);

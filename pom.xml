@@ -108,7 +108,7 @@
     </contributor>
   </contributors>
 
-  <scm>
+  <!--<scm>
     <url>http://github.com/mybatis/mybatis-3</url>
     <connection>scm:git:ssh://github.com/mybatis/mybatis-3.git</connection>
     <developerConnection>scm:git:ssh://git@github.com/mybatis/mybatis-3.git</developerConnection>
@@ -128,7 +128,7 @@
       <name>Mybatis GitHub Pages</name>
       <url>git:ssh://git@github.com/mybatis/mybatis-3.git?gh-pages#</url>
     </site>
-  </distributionManagement>
+  </distributionManagement>-->
 
   <properties>
     <clirr.comparisonVersion>3.4.6</clirr.comparisonVersion>

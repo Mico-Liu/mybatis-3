@@ -42,8 +42,8 @@ class MemberAccessTest {
 
   @BeforeAll
   static void setUp() throws Exception {
-    try (Reader reader = Resources
-        .getResourceAsReader("org/apache/ibatis/submitted/member_access/mybatis-config.xml")) {
+    try (
+        Reader reader = Resources.getResourceAsReader("org/apache/ibatis/submitted/member_access/mybatis-config.xml")) {
       sqlSessionFactory = new SqlSessionFactoryBuilder().build(reader);
       sqlSessionFactory.getConfiguration().addMapper(Mapper.class);
     }
@@ -62,8 +62,7 @@ class MemberAccessTest {
       assertEquals(params.protectedField, bean.protectedField);
       assertEquals(params.publicField, bean.publicField);
       assertEquals(params.getPrivateProperty(), bean.properties.get("privateProperty"));
-      assertEquals(params.getPackagePrivateProperty(),
-          bean.properties.get("packagePrivateProperty"));
+      assertEquals(params.getPackagePrivateProperty(), bean.properties.get("packagePrivateProperty"));
       assertEquals(params.getProtectedProperty(), bean.properties.get("protectedProperty"));
       assertEquals(params.getPublicProperty(), bean.properties.get("publicProperty"));
     }
@@ -82,8 +81,7 @@ class MemberAccessTest {
       assertEquals(params.protectedField + "%", bean.protectedField);
       assertEquals(params.publicField + "%", bean.publicField);
       assertEquals(params.getPrivateProperty() + "%", bean.properties.get("privateProperty"));
-      assertEquals(params.getPackagePrivateProperty() + "%",
-          bean.properties.get("packagePrivateProperty"));
+      assertEquals(params.getPackagePrivateProperty() + "%", bean.properties.get("packagePrivateProperty"));
       assertEquals(params.getProtectedProperty() + "%", bean.properties.get("protectedProperty"));
       assertEquals(params.getPublicProperty() + "%", bean.properties.get("publicProperty"));
     }
@@ -102,8 +100,7 @@ class MemberAccessTest {
       assertEquals(params.protectedField, bean.protectedField);
       assertEquals(params.publicField, bean.publicField);
       assertEquals(params.getPrivateProperty(), bean.properties.get("privateProperty"));
-      assertEquals(params.getPackagePrivateProperty(),
-          bean.properties.get("packagePrivateProperty"));
+      assertEquals(params.getPackagePrivateProperty(), bean.properties.get("packagePrivateProperty"));
       assertEquals(params.getProtectedProperty(), bean.properties.get("protectedProperty"));
       assertEquals(params.getPublicProperty(), bean.properties.get("publicProperty"));
     }
@@ -205,186 +202,3 @@ class MemberAccessTest {
 
     @Select({
         // @formatter:off
-        "<script>"
-
-          ,"<bind name=\"privateFieldValue\" value=\"_parameter.privateField + '%'\" />"
-          ,"<bind name=\"packagePrivateFieldValue\" value=\"_parameter.packagePrivateField + '%'\" />"
-          ,"<bind name=\"protectedFieldValue\" value=\"_parameter.protectedField + '%'\" />"
-          ,"<bind name=\"publicFieldValue\" value=\"_parameter.publicField + '%'\" />"
-          ,"<bind name=\"privatePropertyValue\" value=\"_parameter.privateProperty + '%'\" />"
-          ,"<bind name=\"packagePrivatePropertyValue\" value=\"_parameter.packagePrivateProperty + '%'\" />"
-          ,"<bind name=\"protectedPropertyValue\" value=\"_parameter.getProtectedProperty() + '%'\" />"
-          ,"<bind name=\"publicPropertyValue\" value=\"_parameter.publicProperty + '%'\" />"
-
-          ,"SELECT"
-          ,"#{privateFieldValue} as privateField"
-          ,",#{packagePrivateFieldValue} as packagePrivateField"
-          ,",#{protectedFieldValue} as protectedField"
-          ,",#{publicFieldValue} as publicField"
-          ,",#{privatePropertyValue} as privateProperty"
-          ,",#{packagePrivatePropertyValue} as packagePrivateProperty"
-          ,",#{protectedPropertyValue} as protectedProperty"
-          ,",#{publicPropertyValue} as publicProperty"
-
-          ,"FROM"
-            ,"INFORMATION_SCHEMA.SYSTEM_USERS"
-
-        ,"</script>"}
-        // @formatter:on
-    )
-    Bean resultAutoMappingUsingOgnl(Params params);
-
-    @Results({
-        // @formatter:off
-        @Result(property = "privateField", column = "private_field")
-        ,@Result(property = "packagePrivateField", column = "package_private_field")
-        ,@Result(property = "protectedField", column = "protected_field")
-        ,@Result(property = "publicField", column = "public_field")
-        ,@Result(property = "privateProperty", column = "private_property")
-        ,@Result(property = "packagePrivateProperty", column = "package_private_property")
-        ,@Result(property = "protectedProperty", column = "protected_property")
-        ,@Result(property = "publicProperty", column = "public_property")
-        // @formatter:on
-    })
-    @Select({
-        // @formatter:off
-        "SELECT"
-          ,"#{privateField} as private_field"
-          ,",#{packagePrivateField} as package_private_field"
-          ,",#{protectedField} as protected_field"
-          ,",#{publicField} as public_field"
-          ,",#{privateProperty} as private_property"
-          ,",#{packagePrivateProperty} as package_private_property"
-          ,",#{protectedProperty} as protected_property"
-          ,",#{publicProperty} as public_property"
-        ,"FROM"
-          ,"INFORMATION_SCHEMA.SYSTEM_USERS"
-        // @formatter:on
-    })
-    Bean resultMapping(Params params);
-
-    @Select("SELECT '1' FROM INFORMATION_SCHEMA.SYSTEM_USERS")
-    Immutable privateConstructorAutoMapping();
-
-    @Select("SELECT '1', '2' FROM INFORMATION_SCHEMA.SYSTEM_USERS")
-    Immutable packagePrivateConstructorAutoMapping();
-
-    @Select("SELECT '1', '2', '3' FROM INFORMATION_SCHEMA.SYSTEM_USERS")
-    Immutable protectedConstructorAutoMapping();
-
-    @Select("SELECT '1', '2', '3', '4' FROM INFORMATION_SCHEMA.SYSTEM_USERS")
-    Immutable publicConstructorAutoMapping();
-
-    @ConstructorArgs({@Arg(column = "c1", javaType = String.class)})
-    @Select("SELECT '1' as c1 FROM INFORMATION_SCHEMA.SYSTEM_USERS")
-    Immutable privateConstructorMapping();
-
-    @ConstructorArgs({
-        // @formatter:off
-        @Arg(column = "c1", javaType = String.class)
-        ,@Arg(column = "c2", javaType = String.class)
-        // @formatter:on
-    })
-    @Select("SELECT '1' as c1, '2' as c2 FROM INFORMATION_SCHEMA.SYSTEM_USERS")
-    Immutable packagePrivateConstructorMapping();
-
-    @ConstructorArgs({
-        // @formatter:off
-        @Arg(column = "c1", javaType = String.class)
-        ,@Arg(column = "c2", javaType = String.class)
-        ,@Arg(column = "c3", javaType = String.class)
-        // @formatter:on
-    })
-    @Select("SELECT '1' as c1, '2' as c2, '3' as c3 FROM INFORMATION_SCHEMA.SYSTEM_USERS")
-    Immutable protectedConstructorMapping();
-
-    @ConstructorArgs({
-        // @formatter:off
-        @Arg(column = "c1", javaType = String.class)
-        ,@Arg(column = "c2", javaType = String.class)
-        ,@Arg(column = "c3", javaType = String.class)
-        ,@Arg(column = "c4", javaType = String.class)
-        // @formatter:on
-    })
-    @Select("SELECT '1' as c1, '2' as c2, '3' as c3, '4' as c4 FROM INFORMATION_SCHEMA.SYSTEM_USERS")
-    Immutable publicConstructorMapping();
-
-  }
-
-  static class Params {
-    private String privateField = "privateField";
-    String packagePrivateField = "packagePrivateField";
-    protected String protectedField = "protectedField";
-    public String publicField = "publicField";
-
-    private String getPrivateProperty() {
-      return "privateProperty";
-    }
-
-    String getPackagePrivateProperty() {
-      return "packagePrivateProperty";
-    }
-
-    protected String getProtectedProperty() {
-      return "protectedProperty";
-    }
-
-    public String getPublicProperty() {
-      return "publicProperty";
-    }
-  }
-
-  @SuppressWarnings("unused")
-  static class Bean {
-    private String privateField;
-    String packagePrivateField;
-    protected String protectedField;
-    public String publicField;
-    private Map<String, String> properties = new HashMap<>();
-
-    private void setPrivateProperty(String value) {
-      properties.put("privateProperty", value);
-    }
-
-    void setPackagePrivateProperty(String value) {
-      properties.put("packagePrivateProperty", value);
-    }
-
-    protected void setProtectedProperty(String value) {
-      properties.put("protectedProperty", value);
-    }
-
-    public void setPublicProperty(String value) {
-      properties.put("publicProperty", value);
-    }
-  }
-
-  @SuppressWarnings("unused")
-  static class Immutable {
-    private Map<String, String> properties = new HashMap<>();
-
-    private Immutable(String arg1) {
-      properties.put("arg1", arg1);
-    }
-
-    Immutable(String arg1, String arg2) {
-      properties.put("arg1", arg1);
-      properties.put("arg2", arg2);
-    }
-
-    protected Immutable(String arg1, String arg2, String arg3) {
-      properties.put("arg1", arg1);
-      properties.put("arg2", arg2);
-      properties.put("arg3", arg3);
-    }
-
-    public Immutable(String arg1, String arg2, String arg3, String arg4) {
-      properties.put("arg1", arg1);
-      properties.put("arg2", arg2);
-      properties.put("arg3", arg3);
-      properties.put("arg4", arg4);
-    }
-
-  }
-
-}

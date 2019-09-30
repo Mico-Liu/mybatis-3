@@ -80,17 +80,18 @@ class VFSTest {
     Assertions.assertEquals(vfs, VFS.getInstance());
 
     Assertions.assertThrows(RuntimeException.class, () -> {
-      //java.lang.IllegalArgumentException: wrong number of arguments
+      // java.lang.IllegalArgumentException: wrong number of arguments
       VFS.invoke(VFS.class.getMethod("getInstance"), VFS.class, "unnecessaryArgument");
     });
 
     Assertions.assertThrows(IOException.class, () -> {
-      //InvocationTargetException.getTargetException -> IOException
-      VFS.invoke(Resources.class.getMethod("getResourceAsProperties", String.class), Resources.class, "invalidResource");
+      // InvocationTargetException.getTargetException -> IOException
+      VFS.invoke(Resources.class.getMethod("getResourceAsProperties", String.class), Resources.class,
+          "invalidResource");
     });
 
     Assertions.assertThrows(RuntimeException.class, () -> {
-      //Other InvocationTargetException
+      // Other InvocationTargetException
       VFS.invoke(Integer.class.getMethod("valueOf", String.class), Resources.class, "InvalidIntegerNumber");
     });
 

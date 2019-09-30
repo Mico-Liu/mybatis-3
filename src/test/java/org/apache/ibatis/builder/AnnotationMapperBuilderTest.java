@@ -62,7 +62,6 @@ class AnnotationMapperBuilderTest {
     assertThat(mappedStatement.getResultSetType()).isEqualTo(ResultSetType.SCROLL_INSENSITIVE);
   }
 
-
   @Test
   void withOptionsAndWithoutOptionsAttributesWhenNotSpecifyDefaultValue() {
     Configuration configuration = new Configuration();
