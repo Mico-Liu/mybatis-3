@@ -96,6 +96,7 @@ class PooledConnection implements InvocationHandler {
    * Invalidates the connection.
    */
   public void invalidate() {
+    //设置连接无效
     valid = false;
   }
 
@@ -105,6 +106,7 @@ class PooledConnection implements InvocationHandler {
    * @return True if the connection is usable
    */
   public boolean isValid() {
+    //当连接有效时，调用 PooledDataSource#pingConnection(PooledConnection conn) 方法，向数据库发起 “ping” 请求，判断连接是否真正有效。
     return valid && realConnection != null && dataSource.pingConnection(this);
   }
 
@@ -275,16 +277,20 @@ class PooledConnection implements InvocationHandler {
   @Override
   public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
     String methodName = method.getName();
+    // <1> 判断是否为 CLOSE 方法，则将连接放回到连接池中，避免连接被关闭
+    //在realConnection调用close()方法时，不需要真实去关闭连接，把连接放回连接词即可，这里把连接放回连接池，重复使用
     if (CLOSE.hashCode() == methodName.hashCode() && CLOSE.equals(methodName)) {
       dataSource.pushConnection(this);
       return null;
     }
     try {
+      // <2.1> 判断非 Object 的方法，则先检查连接是否可用
       if (!Object.class.equals(method.getDeclaringClass())) {
         // issue #579 toString() should never fail
         // throw an SQLException instead of a Runtime
         checkConnection();
       }
+      // <2.2> 反射调用对应的方法
       return method.invoke(realConnection, args);
     } catch (Throwable t) {
       throw ExceptionUtil.unwrapThrowable(t);
