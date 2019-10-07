@@ -40,17 +40,17 @@ import org.apache.ibatis.reflection.ArrayUtil;
  */
 public abstract class BaseJdbcLogger {
 
-  //PreparedStatement类的所有Set方法
+  // PreparedStatement类的所有Set方法
   protected static final Set<String> SET_METHODS;
   protected static final Set<String> EXECUTE_METHODS = new HashSet<>();
 
-  //操作数据库实体的所有字段和字段值
+  // 操作数据库实体的所有字段和字段值
   private final Map<Object, Object> columnMap = new HashMap<>();
 
   // 所有字段集合
   private final List<Object> columnNames = new ArrayList<>();
 
-  //所有字段对应的值得集合
+  // 所有字段对应的值得集合
   private final List<Object> columnValues = new ArrayList<>();
 
   // mybatis 日志对象
@@ -70,13 +70,13 @@ public abstract class BaseJdbcLogger {
   }
 
   static {
-    //获取PreparedStatement类的所有set方法的方法名称
+    // 获取PreparedStatement类的所有set方法的方法名称
     // 过滤了方法以set开头，并且set方法参数大于1个
     SET_METHODS = Arrays.stream(PreparedStatement.class.getDeclaredMethods())
         .filter(method -> method.getName().startsWith("set")).filter(method -> method.getParameterCount() > 1)
         .map(Method::getName).collect(Collectors.toSet());
 
-    //执行方法名列表
+    // 执行方法名列表
     EXECUTE_METHODS.add("execute");
     EXECUTE_METHODS.add("executeUpdate");
     EXECUTE_METHODS.add("executeQuery");

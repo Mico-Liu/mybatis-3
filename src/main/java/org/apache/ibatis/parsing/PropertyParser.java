@@ -1,17 +1,17 @@
 /**
- * Copyright 2009-2019 the original author or authors.
- * <p>
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- * <p>
- * http://www.apache.org/licenses/LICENSE-2.0
- * <p>
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ *    Copyright 2009-2019 the original author or authors.
+ *
+ *    Licensed under the Apache License, Version 2.0 (the "License");
+ *    you may not use this file except in compliance with the License.
+ *    You may obtain a copy of the License at
+ *
+ *       http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *    Unless required by applicable law or agreed to in writing, software
+ *    distributed under the License is distributed on an "AS IS" BASIS,
+ *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *    See the License for the specific language governing permissions and
+ *    limitations under the License.
  */
 package org.apache.ibatis.parsing;
 
@@ -78,23 +78,21 @@ public class PropertyParser {
     /**
      * 改变默认值
      *
-     * <properties resource="org/mybatis/example/config.properties">
-     * <!-- ... -->
-     * <property name="org.apache.ibatis.parsing.PropertyParser.enable-default-value" value="true"/> <!-- Enable this feature -->
-     * </properties>
+     * <properties resource="org/mybatis/example/config.properties"> <!-- ... -->
+     * <property name="org.apache.ibatis.parsing.PropertyParser.enable-default-value" value="true"/> <!-- Enable this
+     * feature --> </properties>
      *
-     * <properties resource="org/mybatis/example/config.properties">
-     * <!-- ... -->
-     * <property name="org.apache.ibatis.parsing.PropertyParser.default-value-separator" value="?:"/> <!-- Change default value of separator -->
-     * </properties>
+     * <properties resource="org/mybatis/example/config.properties"> <!-- ... -->
+     * <property name="org.apache.ibatis.parsing.PropertyParser.default-value-separator" value="?:"/> <!-- Change
+     * default value of separator --> </properties>
      *
      * @param variables
      */
     private VariableTokenHandler(Properties variables) {
       this.variables = variables;
-      //org.apache.ibatis.parsing.PropertyParser.enable-default-value=false
+      // org.apache.ibatis.parsing.PropertyParser.enable-default-value=false
       this.enableDefaultValue = Boolean.parseBoolean(getPropertyValue(KEY_ENABLE_DEFAULT_VALUE, ENABLE_DEFAULT_VALUE));
-      //org.apache.ibatis.parsing.PropertyParser.default-value-separator=:
+      // org.apache.ibatis.parsing.PropertyParser.default-value-separator=:
       this.defaultValueSeparator = getPropertyValue(KEY_DEFAULT_VALUE_SEPARATOR, DEFAULT_VALUE_SEPARATOR);
     }
 
@@ -108,14 +106,14 @@ public class PropertyParser {
         String key = content;
         // 开启默认值功能
         if (enableDefaultValue) {
-          //查找分隔符
+          // 查找分隔符
           final int separatorIndex = content.indexOf(defaultValueSeparator);
           String defaultValue = null;
-          //content存在分隔符
+          // content存在分隔符
           if (separatorIndex >= 0) {
-            //用户配置的key值
+            // 用户配置的key值
             key = content.substring(0, separatorIndex);
-            //用户配置的默认值
+            // 用户配置的默认值
             defaultValue = content.substring(separatorIndex + defaultValueSeparator.length());
           }
           // 如果用户有配置默认值。优先从variables查找，如果没有就使用此默认值

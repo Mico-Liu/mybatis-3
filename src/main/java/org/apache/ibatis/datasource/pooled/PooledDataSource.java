@@ -1,17 +1,17 @@
 /**
- * Copyright 2009-2019 the original author or authors.
- * <p>
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- * <p>
- * http://www.apache.org/licenses/LICENSE-2.0
- * <p>
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ *    Copyright 2009-2019 the original author or authors.
+ *
+ *    Licensed under the Apache License, Version 2.0 (the "License");
+ *    you may not use this file except in compliance with the License.
+ *    You may obtain a copy of the License at
+ *
+ *       http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *    Unless required by applicable law or agreed to in writing, software
+ *    distributed under the License is distributed on an "AS IS" BASIS,
+ *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *    See the License for the specific language governing permissions and
+ *    limitations under the License.
  */
 package org.apache.ibatis.datasource.pooled;
 
@@ -72,7 +72,8 @@ public class PooledDataSource implements DataSource {
   protected int poolTimeToWait = 20000;
 
   /**
-   * 这是一个关于坏连接容忍度的底层设置，作用于每一个尝试从缓存池获取连接的线程. 如果这个线程获取到的是一个坏的连接，那么这个数据源允许这个线程尝试重新获取一个新的连接，但是这个重新尝试的次数不应该超过 poolMaximumIdleConnections 与 poolMaximumLocalBadConnectionTolerance 之和。
+   * 这是一个关于坏连接容忍度的底层设置，作用于每一个尝试从缓存池获取连接的线程. 如果这个线程获取到的是一个坏的连接，那么这个数据源允许这个线程尝试重新获取一个新的连接，但是这个重新尝试的次数不应该超过
+   * poolMaximumIdleConnections 与 poolMaximumLocalBadConnectionTolerance 之和。
    */
   protected int poolMaximumLocalBadConnectionTolerance = 3;
 
@@ -105,29 +106,29 @@ public class PooledDataSource implements DataSource {
   }
 
   public PooledDataSource(String driver, String url, String username, String password) {
-    //还是使用UnpooledDataSource。获取真正连接的逻辑，还是在 UnpooledDataSource 中实现。
+    // 还是使用UnpooledDataSource。获取真正连接的逻辑，还是在 UnpooledDataSource 中实现。
     dataSource = new UnpooledDataSource(driver, url, username, password);
     // 根据url、username、password计算哈希值
     expectedConnectionTypeCode = assembleConnectionTypeCode(dataSource.getUrl(), dataSource.getUsername(),
-      dataSource.getPassword());
+        dataSource.getPassword());
   }
 
   public PooledDataSource(String driver, String url, Properties driverProperties) {
     dataSource = new UnpooledDataSource(driver, url, driverProperties);
     expectedConnectionTypeCode = assembleConnectionTypeCode(dataSource.getUrl(), dataSource.getUsername(),
-      dataSource.getPassword());
+        dataSource.getPassword());
   }
 
   public PooledDataSource(ClassLoader driverClassLoader, String driver, String url, String username, String password) {
     dataSource = new UnpooledDataSource(driverClassLoader, driver, url, username, password);
     expectedConnectionTypeCode = assembleConnectionTypeCode(dataSource.getUrl(), dataSource.getUsername(),
-      dataSource.getPassword());
+        dataSource.getPassword());
   }
 
   public PooledDataSource(ClassLoader driverClassLoader, String driver, String url, Properties driverProperties) {
     dataSource = new UnpooledDataSource(driverClassLoader, driver, url, driverProperties);
     expectedConnectionTypeCode = assembleConnectionTypeCode(dataSource.getUrl(), dataSource.getUsername(),
-      dataSource.getPassword());
+        dataSource.getPassword());
   }
 
   @Override
@@ -199,7 +200,8 @@ public class PooledDataSource implements DataSource {
    * Sets the default network timeout value to wait for the database operation to complete. See
    * {@link Connection#setNetworkTimeout(java.util.concurrent.Executor, int)}
    *
-   * @param milliseconds The time in milliseconds to wait for the database operation to complete.
+   * @param milliseconds
+   *          The time in milliseconds to wait for the database operation to complete.
    * @since 3.5.2
    */
   public void setDefaultNetworkTimeout(Integer milliseconds) {
@@ -210,7 +212,8 @@ public class PooledDataSource implements DataSource {
   /**
    * The maximum number of active connections.
    *
-   * @param poolMaximumActiveConnections The maximum number of active connections
+   * @param poolMaximumActiveConnections
+   *          The maximum number of active connections
    */
   public void setPoolMaximumActiveConnections(int poolMaximumActiveConnections) {
     this.poolMaximumActiveConnections = poolMaximumActiveConnections;
@@ -220,7 +223,8 @@ public class PooledDataSource implements DataSource {
   /**
    * The maximum number of idle connections.
    *
-   * @param poolMaximumIdleConnections The maximum number of idle connections
+   * @param poolMaximumIdleConnections
+   *          The maximum number of idle connections
    */
   public void setPoolMaximumIdleConnections(int poolMaximumIdleConnections) {
     this.poolMaximumIdleConnections = poolMaximumIdleConnections;
@@ -231,7 +235,8 @@ public class PooledDataSource implements DataSource {
    * The maximum number of tolerance for bad connection happens in one thread which are applying for new
    * {@link PooledConnection}.
    *
-   * @param poolMaximumLocalBadConnectionTolerance max tolerance for bad connection happens in one thread
+   * @param poolMaximumLocalBadConnectionTolerance
+   *          max tolerance for bad connection happens in one thread
    * @since 3.4.5
    */
   public void setPoolMaximumLocalBadConnectionTolerance(int poolMaximumLocalBadConnectionTolerance) {
@@ -241,7 +246,8 @@ public class PooledDataSource implements DataSource {
   /**
    * The maximum time a connection can be used before it *may* be given away again.
    *
-   * @param poolMaximumCheckoutTime The maximum time
+   * @param poolMaximumCheckoutTime
+   *          The maximum time
    */
   public void setPoolMaximumCheckoutTime(int poolMaximumCheckoutTime) {
     this.poolMaximumCheckoutTime = poolMaximumCheckoutTime;
@@ -251,7 +257,8 @@ public class PooledDataSource implements DataSource {
   /**
    * The time to wait before retrying to get a connection.
    *
-   * @param poolTimeToWait The time to wait
+   * @param poolTimeToWait
+   *          The time to wait
    */
   public void setPoolTimeToWait(int poolTimeToWait) {
     this.poolTimeToWait = poolTimeToWait;
@@ -261,7 +268,8 @@ public class PooledDataSource implements DataSource {
   /**
    * The query to be used to check a connection.
    *
-   * @param poolPingQuery The query
+   * @param poolPingQuery
+   *          The query
    */
   public void setPoolPingQuery(String poolPingQuery) {
     this.poolPingQuery = poolPingQuery;
@@ -271,7 +279,8 @@ public class PooledDataSource implements DataSource {
   /**
    * Determines if the ping query should be used.
    *
-   * @param poolPingEnabled True if we need to check a connection before using it
+   * @param poolPingEnabled
+   *          True if we need to check a connection before using it
    */
   public void setPoolPingEnabled(boolean poolPingEnabled) {
     this.poolPingEnabled = poolPingEnabled;
@@ -282,7 +291,8 @@ public class PooledDataSource implements DataSource {
    * If a connection has not been used in this many milliseconds, ping the database to make sure the connection is still
    * good.
    *
-   * @param milliseconds the number of milliseconds of inactivity that will trigger a ping
+   * @param milliseconds
+   *          the number of milliseconds of inactivity that will trigger a ping
    */
   public void setPoolPingConnectionsNotUsedFor(int milliseconds) {
     this.poolPingConnectionsNotUsedFor = milliseconds;
@@ -357,14 +367,13 @@ public class PooledDataSource implements DataSource {
   }
 
   /**
-   * Closes all active and idle connections in the pool.
-   * 关闭所有的 activeConnections 和 idleConnections 的连接
+   * Closes all active and idle connections in the pool. 关闭所有的 activeConnections 和 idleConnections 的连接
    */
   public void forceCloseAll() {
     synchronized (state) {
       // 计算 expectedConnectionTypeCode
       expectedConnectionTypeCode = assembleConnectionTypeCode(dataSource.getUrl(), dataSource.getUsername(),
-        dataSource.getPassword());
+          dataSource.getPassword());
       // 遍历 activeConnections ，进行关闭
       for (int i = state.activeConnections.size(); i > 0; i--) {
         try {
@@ -383,7 +392,7 @@ public class PooledDataSource implements DataSource {
         }
       }
       // 遍历 idleConnections ，进行关闭
-      //【实现代码上，和上面是一样的】
+      // 【实现代码上，和上面是一样的】
       for (int i = state.idleConnections.size(); i > 0; i--) {
         try {
           // 设置为失效
@@ -422,7 +431,7 @@ public class PooledDataSource implements DataSource {
       if (conn.isValid()) {
         // 判断是否超过空闲连接上限，并且和当前连接池的标识匹配
         if (state.idleConnections.size() < poolMaximumIdleConnections
-          && conn.getConnectionTypeCode() == expectedConnectionTypeCode) {
+            && conn.getConnectionTypeCode() == expectedConnectionTypeCode) {
           // 统计连接使用时长
           state.accumulatedCheckoutTime += conn.getCheckoutTime();
           // 回滚事务，避免未提交或者回滚事 务
@@ -459,7 +468,7 @@ public class PooledDataSource implements DataSource {
       } else {
         if (log.isDebugEnabled()) {
           log.debug("A bad connection (" + conn.getRealHashCode()
-            + ") attempted to return to the pool, discarding connection.");
+              + ") attempted to return to the pool, discarding connection.");
         }
         // 统计获取到坏的连接的次数
         state.badConnectionCount++;
@@ -477,10 +486,10 @@ public class PooledDataSource implements DataSource {
     // 记录当前方法，获取到坏连接的次数
     int localBadConnectionCount = 0;
 
-    //一直循环，获取可用的 Connection 连接
+    // 一直循环，获取可用的 Connection 连接
     while (conn == null) {
       synchronized (state) {
-        //空闲连接集合还有连接，则直接获取
+        // 空闲连接集合还有连接，则直接获取
         if (!state.idleConnections.isEmpty()) {
           // Pool has available connection
           // 通过移除的方式，获得首个空闲的连接
@@ -489,7 +498,7 @@ public class PooledDataSource implements DataSource {
             log.debug("Checked out connection " + conn.getRealHashCode() + " from pool.");
           }
         }
-        //空闲连接集合为空，即没有可用连接
+        // 空闲连接集合为空，即没有可用连接
         else {
           // Pool does not have available connection
           // 激活的连接数小于 poolMaximumActiveConnections，说明还可以继续创建
@@ -501,7 +510,7 @@ public class PooledDataSource implements DataSource {
               log.debug("Created connection " + conn.getRealHashCode() + ".");
             }
           }
-          //已经超过配置的poolMaximumActiveConnections最大连接数，不能再创建新连接
+          // 已经超过配置的poolMaximumActiveConnections最大连接数，不能再创建新连接
           // 只能从正在使用的连接中释是否能释放出来使用
           else {
             // Cannot create new connection
@@ -509,7 +518,7 @@ public class PooledDataSource implements DataSource {
             PooledConnection oldestActiveConnection = state.activeConnections.get(0);
             // 检查该连接是否超时
             long longestCheckoutTime = oldestActiveConnection.getCheckoutTime();
-            //超过poolMaximumCheckoutTime配置的超时时间
+            // 超过poolMaximumCheckoutTime配置的超时时间
             if (longestCheckoutTime > poolMaximumCheckoutTime) {
               // Can claim overdue connection
               // 对连接超时的时间的统计
@@ -523,7 +532,7 @@ public class PooledDataSource implements DataSource {
               // 如果非自动提交的，需要进行回滚。即将原有执行中的事务，全部回滚。
               if (!oldestActiveConnection.getRealConnection().getAutoCommit()) {
                 try {
-                  //回滚
+                  // 回滚
                   oldestActiveConnection.getRealConnection().rollback();
                 } catch (SQLException e) {
                   /*
@@ -539,7 +548,7 @@ public class PooledDataSource implements DataSource {
               conn = new PooledConnection(oldestActiveConnection.getRealConnection(), this);
               conn.setCreatedTimestamp(oldestActiveConnection.getCreatedTimestamp());
               conn.setLastUsedTimestamp(oldestActiveConnection.getLastUsedTimestamp());
-              //把oldestActiveConnection标识为无效
+              // 把oldestActiveConnection标识为无效
               oldestActiveConnection.invalidate();
               if (log.isDebugEnabled()) {
                 log.debug("Claimed overdue connection " + conn.getRealHashCode() + ".");
@@ -563,7 +572,7 @@ public class PooledDataSource implements DataSource {
                 // 等待，直到超时，或 pingConnection 方法中归还连接时的唤醒
                 state.wait(poolTimeToWait);
                 // 统计等待连接的时间。 这里为什么不使用poolTimeToWait， 因为这个是可能的值，而不是一定这个值。要用实际的值
-                //即用当前时间减去wt
+                // 即用当前时间减去wt
                 state.accumulatedWaitTime += System.currentTimeMillis() - wt;
               } catch (InterruptedException e) {
                 break;
@@ -592,11 +601,11 @@ public class PooledDataSource implements DataSource {
             // 所有请求成功连接的总耗时时间
             state.accumulatedRequestTime += System.currentTimeMillis() - t;
           }
-          //连接不可用
+          // 连接不可用
           else {
             if (log.isDebugEnabled()) {
               log.debug("A bad connection (" + conn.getRealHashCode()
-                + ") was returned from the pool, getting another connection.");
+                  + ") was returned from the pool, getting another connection.");
             }
             // 统计获取到坏的连接的次数
             state.badConnectionCount++;
@@ -623,7 +632,7 @@ public class PooledDataSource implements DataSource {
         log.debug("PooledDataSource: Unknown severe error condition.  The connection pool returned a null connection.");
       }
       throw new SQLException(
-        "PooledDataSource: Unknown severe error condition.  The connection pool returned a null connection.");
+          "PooledDataSource: Unknown severe error condition.  The connection pool returned a null connection.");
     }
 
     return conn;
@@ -632,7 +641,8 @@ public class PooledDataSource implements DataSource {
   /**
    * Method to check to see if a connection is still usable
    *
-   * @param conn - the connection to check
+   * @param conn
+   *          - the connection to check
    * @return True if the connection is still usable
    */
   protected boolean pingConnection(PooledConnection conn) {
@@ -696,7 +706,8 @@ public class PooledDataSource implements DataSource {
    *
    * 获取真实的数据库连接
    *
-   * @param conn - the pooled connection to unwrap
+   * @param conn
+   *          - the pooled connection to unwrap
    * @return The 'real' connection
    */
   public static Connection unwrapConnection(Connection conn) {

@@ -51,8 +51,7 @@ public class UnpooledDataSource implements DataSource {
   /**
    * 已注册的 Driver 映射
    *
-   * KEY：Driver 类名
-   * VALUE：Driver 对象
+   * KEY：Driver 类名 VALUE：Driver 对象
    */
   private static Map<String, Driver> registeredDrivers = new ConcurrentHashMap<>();
 
@@ -85,7 +84,6 @@ public class UnpooledDataSource implements DataSource {
    * 默认事务隔离级别
    */
   private Integer defaultTransactionIsolationLevel;
-
 
   private Integer defaultNetworkTimeout;
 
@@ -279,7 +277,7 @@ public class UnpooledDataSource implements DataSource {
       try {
         // <2> 获得 driver 类
         if (driverClassLoader != null) {
-          //常见的"Class.forName("com.mysql.jdbc.Driver")" 。
+          // 常见的"Class.forName("com.mysql.jdbc.Driver")" 。
           driverType = Class.forName(driver, true, driverClassLoader);
         } else {
           driverType = Resources.classForName(driver);
@@ -352,7 +350,7 @@ public class UnpooledDataSource implements DataSource {
 
     @Override
     public Logger getParentLogger() {
-      //使用 MyBatis 自定义的 Logger 对象。
+      // 使用 MyBatis 自定义的 Logger 对象。
       return Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
     }
   }

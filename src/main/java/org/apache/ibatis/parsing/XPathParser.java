@@ -129,14 +129,18 @@ public class XPathParser {
   /**
    * 构造 XPathParser 对象
    *
-   * @param xml XML 文件地址
-   * @param validation 是否校验 XML
-   * @param variables 变量 Properties 对象
-   * @param entityResolver XML 实体解析器
+   * @param xml
+   *          XML 文件地址
+   * @param validation
+   *          是否校验 XML
+   * @param variables
+   *          变量 Properties 对象
+   * @param entityResolver
+   *          XML 实体解析器
    */
   public XPathParser(String xml, boolean validation, Properties variables, EntityResolver entityResolver) {
     commonConstructor(validation, variables, entityResolver);
-    //将 XML 文件解析成 Document 对象
+    // 将 XML 文件解析成 Document 对象
     this.document = createDocument(new InputSource(new StringReader(xml)));
   }
 
@@ -252,9 +256,12 @@ public class XPathParser {
   /**
    * 获得指定元素或节点的值
    *
-   * @param expression 表达式
-   * @param root 指定节点
-   * @param returnType 返回类型
+   * @param expression
+   *          表达式
+   * @param root
+   *          指定节点
+   * @param returnType
+   *          返回类型
    * @return 值
    */
   private Object evaluate(String expression, Object root, QName returnType) {
@@ -268,7 +275,8 @@ public class XPathParser {
   /**
    * 创建 Document 对象
    *
-   * @param inputSource XML 的 InputSource 对象
+   * @param inputSource
+   *          XML 的 InputSource 对象
    * @return Document 对象
    */
   private Document createDocument(InputSource inputSource) {
@@ -282,7 +290,6 @@ public class XPathParser {
       factory.setIgnoringComments(true);
       factory.setIgnoringElementContentWhitespace(false);
       factory.setCoalescing(false);
-
 
       // 2> 创建 DocumentBuilder 对象
       DocumentBuilder builder = factory.newDocumentBuilder();
