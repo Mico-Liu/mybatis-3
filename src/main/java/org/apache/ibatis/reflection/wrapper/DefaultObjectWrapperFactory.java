@@ -1,17 +1,17 @@
 /**
- *    Copyright 2009-2019 the original author or authors.
- *
- *    Licensed under the Apache License, Version 2.0 (the "License");
- *    you may not use this file except in compliance with the License.
- *    You may obtain a copy of the License at
- *
- *       http://www.apache.org/licenses/LICENSE-2.0
- *
- *    Unless required by applicable law or agreed to in writing, software
- *    distributed under the License is distributed on an "AS IS" BASIS,
- *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *    See the License for the specific language governing permissions and
- *    limitations under the License.
+ * Copyright 2009-2019 the original author or authors.
+ * <p>
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * <p>
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * <p>
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package org.apache.ibatis.reflection.wrapper;
 
@@ -19,6 +19,8 @@ import org.apache.ibatis.reflection.MetaObject;
 import org.apache.ibatis.reflection.ReflectionException;
 
 /**
+ * 实现 ObjectWrapperFactory 接口，默认 ObjectWrapperFactory 实现类
+ *
  * @author Clinton Begin
  */
 public class DefaultObjectWrapperFactory implements ObjectWrapperFactory {
@@ -28,10 +30,17 @@ public class DefaultObjectWrapperFactory implements ObjectWrapperFactory {
     return false;
   }
 
+  /**
+   * 诶？貌似是个空的实现类？？？实际上，默认情况下，我们是不使用 ObjectWrapperFactory 对象的。
+   *
+   * @param metaObject MetaObject 对象
+   * @param object     指定对象
+   * @return
+   */
   @Override
   public ObjectWrapper getWrapperFor(MetaObject metaObject, Object object) {
     throw new ReflectionException(
-        "The DefaultObjectWrapperFactory should never be called to provide an ObjectWrapper.");
+      "The DefaultObjectWrapperFactory should never be called to provide an ObjectWrapper.");
   }
 
 }
