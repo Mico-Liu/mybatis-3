@@ -1,40 +1,43 @@
 /**
- *    Copyright 2009-2019 the original author or authors.
- *
- *    Licensed under the Apache License, Version 2.0 (the "License");
- *    you may not use this file except in compliance with the License.
- *    You may obtain a copy of the License at
- *
- *       http://www.apache.org/licenses/LICENSE-2.0
- *
- *    Unless required by applicable law or agreed to in writing, software
- *    distributed under the License is distributed on an "AS IS" BASIS,
- *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *    See the License for the specific language governing permissions and
- *    limitations under the License.
+ * Copyright 2009-2019 the original author or authors.
+ * <p>
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * <p>
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * <p>
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package org.apache.ibatis.io;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.Reader;
+import java.io.*;
 import java.net.URL;
 import java.net.URLConnection;
 import java.nio.charset.Charset;
 import java.util.Properties;
 
 /**
+ * Resource 工具类。
+ *
  * A class to simplify access to resources through the classloader.
  *
  * @author Clinton Begin
  */
 public class Resources {
 
+  /**
+   * ClassLoaderWrapper 对象
+   */
   private static ClassLoaderWrapper classLoaderWrapper = new ClassLoaderWrapper();
 
   /**
+   * 字符集
+   *
    * Charset to use when calling getResourceAsReader. null means use the system default.
    */
   private static Charset charset;
@@ -62,6 +65,8 @@ public class Resources {
   }
 
   /**
+   * 静态方法，获得指定资源的 URL
+   *
    * Returns the URL of the resource on the classpath
    *
    * @param resource
@@ -76,6 +81,8 @@ public class Resources {
   }
 
   /**
+   * 静态方法，获得指定资源的 URL
+   *
    * Returns the URL of the resource on the classpath
    *
    * @param loader
@@ -95,6 +102,8 @@ public class Resources {
   }
 
   /**
+   * 静态方法，获得指定资源的 InputStream
+   *
    * Returns a resource on the classpath as a Stream object
    *
    * @param resource
@@ -108,6 +117,8 @@ public class Resources {
   }
 
   /**
+   * 静态方法，获得指定资源的 InputStream
+   *
    * Returns a resource on the classpath as a Stream object
    *
    * @param loader
@@ -127,6 +138,8 @@ public class Resources {
   }
 
   /**
+   * 静态方法，获得指定资源的 Properties
+   *
    * Returns a resource on the classpath as a Properties object
    *
    * @param resource
@@ -144,6 +157,8 @@ public class Resources {
   }
 
   /**
+   * 静态方法，获得指定资源的 Properties
+   *
    * Returns a resource on the classpath as a Properties object
    *
    * @param loader
@@ -163,6 +178,8 @@ public class Resources {
   }
 
   /**
+   * 静态方法，获得指定资源的 Reader
+   *
    * Returns a resource on the classpath as a Reader object
    *
    * @param resource
@@ -182,6 +199,8 @@ public class Resources {
   }
 
   /**
+   * 静态方法，获得指定资源的 Reader
+   *
    * Returns a resource on the classpath as a Reader object
    *
    * @param loader
@@ -203,6 +222,8 @@ public class Resources {
   }
 
   /**
+   * 静态方法，获得指定资源的 File
+   *
    * Returns a resource on the classpath as a File object
    *
    * @param resource
@@ -216,6 +237,8 @@ public class Resources {
   }
 
   /**
+   * 静态方法，获得指定资源的 File
+   *
    * Returns a resource on the classpath as a File object
    *
    * @param loader
@@ -231,6 +254,8 @@ public class Resources {
   }
 
   /**
+   * 静态方法，获得指定 URL
+   *
    * Gets a URL as an input stream
    *
    * @param urlString
@@ -246,6 +271,8 @@ public class Resources {
   }
 
   /**
+   * 静态方法，指定 URL 的 Reader
+   *
    * Gets a URL as a Reader
    *
    * @param urlString
@@ -265,6 +292,8 @@ public class Resources {
   }
 
   /**
+   * 静态方法，指定 URL 的 Properties
+   *
    * Gets a URL as a Properties object
    *
    * @param urlString
@@ -282,6 +311,8 @@ public class Resources {
   }
 
   /**
+   * 静态方法，获得指定类名对应的类
+   *
    * Loads a class
    *
    * @param className
