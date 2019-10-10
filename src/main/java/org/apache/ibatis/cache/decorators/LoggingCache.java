@@ -1,17 +1,17 @@
 /**
- *    Copyright 2009-2019 the original author or authors.
- *
- *    Licensed under the Apache License, Version 2.0 (the "License");
- *    you may not use this file except in compliance with the License.
- *    You may obtain a copy of the License at
- *
- *       http://www.apache.org/licenses/LICENSE-2.0
- *
- *    Unless required by applicable law or agreed to in writing, software
- *    distributed under the License is distributed on an "AS IS" BASIS,
- *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *    See the License for the specific language governing permissions and
- *    limitations under the License.
+ * Copyright 2009-2019 the original author or authors.
+ * <p>
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * <p>
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * <p>
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package org.apache.ibatis.cache.decorators;
 
@@ -20,13 +20,27 @@ import org.apache.ibatis.logging.Log;
 import org.apache.ibatis.logging.LogFactory;
 
 /**
+ * 实现 Cache 接口，支持打印日志的 Cache 实现类
+ *
  * @author Clinton Begin
  */
 public class LoggingCache implements Cache {
 
+  /**
+   * MyBatis Log 对象
+   */
   private final Log log;
+  /**
+   * 装饰的 Cache 对象。delegate 属性，被装饰的 Cache 对象。
+   */
   private final Cache delegate;
+  /**
+   * 统计请求缓存的次数
+   */
   protected int requests = 0;
+  /**
+   * 统计命中缓存的次数
+   */
   protected int hits = 0;
 
   public LoggingCache(Cache delegate) {
@@ -51,8 +65,11 @@ public class LoggingCache implements Cache {
 
   @Override
   public Object getObject(Object key) {
+    // 请求次数 ++
     requests++;
+    // 获得缓存
     final Object value = delegate.getObject(key);
+    // 如果命中缓存，则命中次数 ++
     if (value != null) {
       hits++;
     }
@@ -82,6 +99,13 @@ public class LoggingCache implements Cache {
     return delegate.equals(obj);
   }
 
+  /**
+   * @return 命中比率
+   * <p>
+   * 在 #getObject(Object key) 方法，增加了 requests 和 hits 的计数，
+   * <p>
+   * 从而实现命中比率的统计，即 #getHitRatio() 方法
+   */
   private double getHitRatio() {
     return (double) hits / (double) requests;
   }
