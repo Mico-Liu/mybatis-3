@@ -22,11 +22,16 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
+ * Map 结果的键的注解
+ *
  * @author Clinton Begin
  */
 @Documented
 @Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.METHOD)
+@Target(ElementType.METHOD)//注解作用在方法上
 public @interface MapKey {
+  /**
+   * @return 键名
+   */
   String value();
 }

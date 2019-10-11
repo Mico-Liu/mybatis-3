@@ -30,6 +30,8 @@ import java.lang.annotation.Target;
 public @interface UpdateProvider {
 
   /**
+   * 指明语句所在的类。等同type
+   *
    * Specify a type that implements an SQL provider method.
    *
    * @return a type that implements an SQL provider method
@@ -39,6 +41,8 @@ public @interface UpdateProvider {
   Class<?> value() default void.class;
 
   /**
+   * 指明语句所在的类。等同value
+   *
    * Specify a type that implements an SQL provider method.
    * <p>
    * This attribute is alias of {@link #value()}.
@@ -50,6 +54,8 @@ public @interface UpdateProvider {
   Class<?> type() default void.class;
 
   /**
+   * 指明语句所在的方法
+   *
    * Specify a method for providing an SQL.
    *
    * <p>
