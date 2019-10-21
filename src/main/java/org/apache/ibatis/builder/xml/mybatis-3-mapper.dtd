@@ -16,16 +16,26 @@
        limitations under the License.
 
 -->
+<!-- ELEMENT mapper 里面的设置项，至少出现cache-ref、cache、resultMap、parameterMap、sql、insert、update、delete、select其中的一个子元素
+1、cache-ref：如果出现，只能出现一次
+2、cache：如果出现，只能出现一次
+3、resultMap、parameterMap、sql、insert、update、delete、select：如果出现，可以出现多次
+-->
+<!-- ELEMENT mapper的属性，只有一个namespace，为CDATA类型即普通文本内容。为IMPLIED，即可选项-->
 <!ELEMENT mapper (cache-ref | cache | resultMap* | parameterMap* | sql* | insert* | update* | delete* | select* )+>
 <!ATTLIST mapper
 namespace CDATA #IMPLIED
 >
 
+<!-- ELEMENT cache-ref 是mapper里面的配置项，为EMPTY说明没有子元素-->
+<!-- ELEMENT cache-ref的属性为namespace，普通文本内容，必填项-->
 <!ELEMENT cache-ref EMPTY>
 <!ATTLIST cache-ref
 namespace CDATA #REQUIRED
 >
 
+<!-- ELEMENT cache 是mapper里面的配置项，可以有大于等于0个property属性设置-->
+<!-- ELEMENT cache的属性为type、eviction、flushInterval、size、readOnly、blocking。都是可选项的普通文本内容-->
 <!ELEMENT cache (property*)>
 <!ATTLIST cache
 type CDATA #IMPLIED
@@ -36,12 +46,18 @@ readOnly CDATA #IMPLIED
 blocking CDATA #IMPLIED
 >
 
+<!-- ELEMENT parameterMap 是mapper里面的配置项，至少得有一个parameter子元素-->
+<!-- ELEMENT parameterMap的属性为id、type，普通文本内容，必填项-->
 <!ELEMENT parameterMap (parameter+)?>
 <!ATTLIST parameterMap
 id CDATA #REQUIRED
 type CDATA #REQUIRED
 >
 
+<!-- ELEMENT parameter 是parameterMap里面的配置项，不能有子元素-->
+<!-- ELEMENT parameterMap的属性为property、javaType、jdbcType、mode、resultMap、scale、typeHandler
+都是可选项的普通文本内容
+-->
 <!ELEMENT parameter EMPTY>
 <!ATTLIST parameter
 property CDATA #REQUIRED
@@ -53,6 +69,13 @@ scale CDATA #IMPLIED
 typeHandler CDATA #IMPLIED
 >
 
+<!-- ELEMENT resultMap 是mapper里面的配置项，没有+*?，说明只能按顺序出现括号里的配置
+即constructor出现0次或1次
+id、result、association、collection、discriminator出现大于等于0次
+-->
+<!-- ELEMENT resultMap的属性为id、type、extends、autoMapping
+id、type必选项。extends可选项。autoMapping为true或false的固定值
+-->
 <!ELEMENT resultMap (constructor?,id*,result*,association*,collection*, discriminator?)>
 <!ATTLIST resultMap
 id CDATA #REQUIRED
@@ -61,8 +84,10 @@ extends CDATA #IMPLIED
 autoMapping (true|false) #IMPLIED
 >
 
+<!-- resultMap的constructor只有子元素，没有属性。子元素是可配可不配-->
 <!ELEMENT constructor (idArg*,arg*)>
 
+<!-- resultMap的id没有子元素，但有id、property、javaType、column、jdbcType、typeHandler等属性配置-->
 <!ELEMENT id EMPTY>
 <!ATTLIST id
 property CDATA #IMPLIED
@@ -72,6 +97,7 @@ jdbcType CDATA #IMPLIED
 typeHandler CDATA #IMPLIED
 >
 
+<!-- resultMap的result没有子元素，但有property、javaType、column、jdbcType、typeHandler等属性配置-->
 <!ELEMENT result EMPTY>
 <!ATTLIST result
 property CDATA #IMPLIED
@@ -81,6 +107,7 @@ jdbcType CDATA #IMPLIED
 typeHandler CDATA #IMPLIED
 >
 
+<!-- resultMap的idArg没有子元素，但有javaType、column、jdbcType、typeHandler、select、resultMap、name、columnPrefix等属性配置-->
 <!ELEMENT idArg EMPTY>
 <!ATTLIST idArg
 javaType CDATA #IMPLIED
@@ -93,6 +120,7 @@ name CDATA #IMPLIED
 columnPrefix CDATA #IMPLIED
 >
 
+<!-- resultMap的arg没有子元素，但有javaType、column、jdbcType、typeHandler、select、resultMap、name、columnPrefix等属性配置-->
 <!ELEMENT arg EMPTY>
 <!ATTLIST arg
 javaType CDATA #IMPLIED
@@ -105,6 +133,9 @@ name CDATA #IMPLIED
 columnPrefix CDATA #IMPLIED
 >
 
+<!-- resultMap的collection有constructor、id、result、association、collection、discriminator等子元素的配置，
+但也有property、column、javaType、ofType、jdbcType、select、resultMap、typeHandler、
+name、notNullColumn、columnPrefix、resultSet、foreignColumn、autoMapping、fetchType等属性配置-->
 <!ELEMENT collection (constructor?,id*,result*,association*,collection*, discriminator?)>
 <!ATTLIST collection
 property CDATA #REQUIRED
@@ -123,6 +154,7 @@ autoMapping (true|false) #IMPLIED
 fetchType (lazy|eager) #IMPLIED
 >
 
+<!-- resultMap的association有子元素，也有属性配置-->
 <!ELEMENT association (constructor?,id*,result*,association*,collection*, discriminator?)>
 <!ATTLIST association
 property CDATA #REQUIRED
@@ -140,6 +172,7 @@ autoMapping (true|false) #IMPLIED
 fetchType (lazy|eager) #IMPLIED
 >
 
+<!-- resultMap的discriminator有子元素，也有属性配置-->
 <!ELEMENT discriminator (case+)>
 <!ATTLIST discriminator
 column CDATA #IMPLIED
@@ -148,6 +181,7 @@ jdbcType CDATA #IMPLIED
 typeHandler CDATA #IMPLIED
 >
 
+<!-- discriminator的case有子元素，也有属性配置。 因为上面已经定义过这些子元素，因此不再需要定于-->
 <!ELEMENT case (constructor?,id*,result*,association*,collection*, discriminator?)>
 <!ATTLIST case
 value CDATA #REQUIRED
@@ -155,18 +189,21 @@ resultMap CDATA #IMPLIED
 resultType CDATA #IMPLIED
 >
 
+<!-- mapper的property定义-->
 <!ELEMENT property EMPTY>
 <!ATTLIST property
 name CDATA #REQUIRED
 value CDATA #REQUIRED
 >
 
+<!-- mapper的typeAlias定义-->
 <!ELEMENT typeAlias EMPTY>
 <!ATTLIST typeAlias
 alias CDATA #REQUIRED
 type CDATA #REQUIRED
 >
 
+<!-- mapper的select定义。PCDATA意思是纯文本数据，不能嵌入特殊字符-->
 <!ELEMENT select (#PCDATA | include | trim | where | set | foreach | choose | if | bind)*>
 <!ATTLIST select
 id CDATA #REQUIRED
@@ -183,7 +220,7 @@ useCache (true|false) #IMPLIED
 databaseId CDATA #IMPLIED
 lang CDATA #IMPLIED
 resultOrdered (true|false) #IMPLIED
-resultSets CDATA #IMPLIED 
+resultSets CDATA #IMPLIED
 >
 
 <!ELEMENT insert (#PCDATA | selectKey | include | trim | where | set | foreach | choose | if | bind)*>
