@@ -141,6 +141,10 @@ public class XMLStatementBuilder extends BaseBuilder {
     /**
      * 解析 <selectKey /> 标签
      *
+     * <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+     *             SELECT LAST_INSERT_ID()
+     *         </selectKey>
+     *
      * @param id
      * @param parameterTypeClass
      * @param langDriver
@@ -158,6 +162,10 @@ public class XMLStatementBuilder extends BaseBuilder {
     }
 
     /**
+     * <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+     *             SELECT LAST_INSERT_ID()
+     *         </selectKey>
+     *
      * @param parentId
      * @param list
      * @param parameterTypeClass
@@ -181,6 +189,10 @@ public class XMLStatementBuilder extends BaseBuilder {
 
     /**
      * 执行解析单个 <selectKey /> 节点
+     *
+     * <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+     *             SELECT LAST_INSERT_ID()
+     *         </selectKey>
      *
      * @param id
      * @param nodeToHandle
