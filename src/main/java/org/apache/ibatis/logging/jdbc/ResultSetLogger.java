@@ -1,5 +1,5 @@
 /**
- *    Copyright 2009-2019 the original author or authors.
+ *    Copyright 2009-2020 the original author or authors.
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -122,8 +122,17 @@ public final class ResultSetLogger extends BaseJdbcLogger implements InvocationH
    * Creates a logging version of a ResultSet.
    *
    * @param rs
+<<<<<<< HEAD
    *          - the ResultSet to proxy
    * @return - the ResultSet with logging
+=======
+   *          the ResultSet to proxy
+   * @param statementLog
+   *          the statement log
+   * @param queryStack
+   *          the query stack
+   * @return the ResultSet with logging
+>>>>>>> mybatis-3-trunk/master
    */
   public static ResultSet newInstance(ResultSet rs, Log statementLog, int queryStack) {
     InvocationHandler handler = new ResultSetLogger(rs, statementLog, queryStack);

@@ -1,5 +1,5 @@
 /**
- *    Copyright 2009-2019 the original author or authors.
+ *    Copyright 2009-2020 the original author or authors.
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -46,8 +46,19 @@ public class ProviderSqlSource implements SqlSource {
   private final Integer providerContextIndex;
 
   /**
+<<<<<<< HEAD
    * @deprecated Since 3.5.3, Please use the {@link #ProviderSqlSource(Configuration, Annotation, Class, Method)}
    *             instead of this. This constructor will remove at a future version.
+=======
+   * This constructor will remove at a future version.
+   *
+   * @param configuration
+   *          the configuration
+   * @param provider
+   *          the provider
+   * @deprecated Since 3.5.3, Please use the {@link #ProviderSqlSource(Configuration, Annotation, Class, Method)}
+   *             instead of this.
+>>>>>>> mybatis-3-trunk/master
    */
   @Deprecated
   public ProviderSqlSource(Configuration configuration, Object provider) {
@@ -55,9 +66,23 @@ public class ProviderSqlSource implements SqlSource {
   }
 
   /**
+   * This constructor will remove at a future version.
+   *
+   * @param configuration
+   *          the configuration
+   * @param provider
+   *          the provider
+   * @param mapperType
+   *          the mapper type
+   * @param mapperMethod
+   *          the mapper method
    * @since 3.4.5
+<<<<<<< HEAD
    * @deprecated Since 3.5.3, Please use the {@link #ProviderSqlSource(Configuration, Annotation, Class, Method)}
    *             instead of this. This constructor will remove at a future version.
+=======
+   * @deprecated Since 3.5.3, Please use the {@link #ProviderSqlSource(Configuration, Annotation, Class, Method)} instead of this.
+>>>>>>> mybatis-3-trunk/master
    */
   @Deprecated
   public ProviderSqlSource(Configuration configuration, Object provider, Class<?> mapperType, Method mapperMethod) {
@@ -65,6 +90,16 @@ public class ProviderSqlSource implements SqlSource {
   }
 
   /**
+   * Instantiates a new provider sql source.
+   *
+   * @param configuration
+   *          the configuration
+   * @param provider
+   *          the provider
+   * @param mapperType
+   *          the mapper type
+   * @param mapperMethod
+   *          the mapper method
    * @since 3.5.3
    */
   public ProviderSqlSource(Configuration configuration, Annotation provider, Class<?> mapperType, Method mapperMethod) {
@@ -142,8 +177,12 @@ public class ProviderSqlSource implements SqlSource {
       if (parameterObject instanceof Map) {
         int bindParameterCount = providerMethodParameterTypes.length - (providerContext == null ? 0 : 1);
         if (bindParameterCount == 1
+<<<<<<< HEAD
             && (providerMethodParameterTypes[Integer.valueOf(0).equals(providerContextIndex) ? 1 : 0]
                 .isAssignableFrom(parameterObject.getClass()))) {
+=======
+            && providerMethodParameterTypes[Integer.valueOf(0).equals(providerContextIndex) ? 1 : 0].isAssignableFrom(parameterObject.getClass())) {
+>>>>>>> mybatis-3-trunk/master
           sql = invokeProviderMethod(extractProviderMethodArguments(parameterObject));
         } else {
           @SuppressWarnings("unchecked")

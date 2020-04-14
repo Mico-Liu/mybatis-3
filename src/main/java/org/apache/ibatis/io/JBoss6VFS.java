@@ -1,5 +1,5 @@
 /**
- *    Copyright 2009-2019 the original author or authors.
+ *    Copyright 2009-2020 the original author or authors.
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -38,7 +38,8 @@ public class JBoss6VFS extends VFS {
   /** A class that mimics a tiny subset of the JBoss VirtualFile class. */
   static class VirtualFile {
     static Class<?> VirtualFile;
-    static Method getPathNameRelativeTo, getChildrenRecursively;
+    static Method getPathNameRelativeTo;
+    static Method getChildrenRecursively;
 
     Object virtualFile;
 
@@ -111,8 +112,16 @@ public class JBoss6VFS extends VFS {
    * Verifies that the provided object reference is null. If it is null, then this VFS is marked as invalid for the
    * current environment.
    *
+<<<<<<< HEAD
    * @param object
    *          The object reference to check for null.
+=======
+   * @param <T>
+   *          the generic type
+   * @param object
+   *          The object reference to check for null.
+   * @return the t
+>>>>>>> mybatis-3-trunk/master
    */
   protected static <T> T checkNotNull(T object) {
     if (object == null) {
@@ -139,9 +148,11 @@ public class JBoss6VFS extends VFS {
     }
   }
 
-  /** Mark this {@link VFS} as invalid for the current environment. */
+  /**
+   * Mark this {@link VFS} as invalid for the current environment.
+   */
   protected static void setInvalid() {
-    if (JBoss6VFS.valid == Boolean.TRUE) {
+    if (JBoss6VFS.valid.booleanValue()) {
       log.debug("JBoss 6 VFS API is not available in this environment.");
       JBoss6VFS.valid = Boolean.FALSE;
     }

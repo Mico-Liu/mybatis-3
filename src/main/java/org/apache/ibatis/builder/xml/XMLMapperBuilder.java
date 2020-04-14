@@ -1,4 +1,5 @@
 /**
+<<<<<<< HEAD
  * Copyright 2009-2019 the original author or authors.
  * <p>
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,6 +17,42 @@
 package org.apache.ibatis.builder.xml;
 
 import org.apache.ibatis.builder.*;
+=======
+ *    Copyright 2009-2020 the original author or authors.
+ *
+ *    Licensed under the Apache License, Version 2.0 (the "License");
+ *    you may not use this file except in compliance with the License.
+ *    You may obtain a copy of the License at
+ *
+ *       http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *    Unless required by applicable law or agreed to in writing, software
+ *    distributed under the License is distributed on an "AS IS" BASIS,
+ *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *    See the License for the specific language governing permissions and
+ *    limitations under the License.
+ */
+package org.apache.ibatis.builder.xml;
+
+import java.io.InputStream;
+import java.io.Reader;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Properties;
+
+import org.apache.ibatis.builder.BaseBuilder;
+import org.apache.ibatis.builder.BuilderException;
+import org.apache.ibatis.builder.CacheRefResolver;
+import org.apache.ibatis.builder.IncompleteElementException;
+import org.apache.ibatis.builder.MapperBuilderAssistant;
+import org.apache.ibatis.builder.ResultMapResolver;
+>>>>>>> mybatis-3-trunk/master
 import org.apache.ibatis.cache.Cache;
 import org.apache.ibatis.executor.ErrorContext;
 import org.apache.ibatis.io.Resources;
@@ -63,11 +100,38 @@ public class XMLMapperBuilder extends BaseBuilder {
         this.builderAssistant.setCurrentNamespace(namespace);
     }
 
+<<<<<<< HEAD
     @Deprecated
     public XMLMapperBuilder(Reader reader, Configuration configuration, String resource,
                             Map<String, XNode> sqlFragments) {
         this(new XPathParser(reader, true, configuration.getVariables(), new XMLMapperEntityResolver()), configuration,
                 resource, sqlFragments);
+=======
+    parsePendingResultMaps();
+    parsePendingCacheRefs();
+    parsePendingStatements();
+  }
+
+  public XNode getSqlFragment(String refid) {
+    return sqlFragments.get(refid);
+  }
+
+  private void configurationElement(XNode context) {
+    try {
+      String namespace = context.getStringAttribute("namespace");
+      if (namespace == null || namespace.isEmpty()) {
+        throw new BuilderException("Mapper's namespace cannot be empty");
+      }
+      builderAssistant.setCurrentNamespace(namespace);
+      cacheRefElement(context.evalNode("cache-ref"));
+      cacheElement(context.evalNode("cache"));
+      parameterMapElement(context.evalNodes("/mapper/parameterMap"));
+      resultMapElements(context.evalNodes("/mapper/resultMap"));
+      sqlElement(context.evalNodes("/mapper/sql"));
+      buildStatementFromContext(context.evalNodes("select|insert|update|delete"));
+    } catch (Exception e) {
+      throw new BuilderException("Error parsing Mapper XML. The XML location is '" + resource + "'. Cause: " + e, e);
+>>>>>>> mybatis-3-trunk/master
     }
 
     public XMLMapperBuilder(InputStream inputStream, Configuration configuration, String resource,
@@ -244,6 +308,7 @@ public class XMLMapperBuilder extends BaseBuilder {
             }
         }
     }
+<<<<<<< HEAD
 
     /**
      * 解析 <cache-ref /> 节点。
@@ -339,8 +404,49 @@ public class XMLMapperBuilder extends BaseBuilder {
                 parameterMappings.add(parameterMapping);
             }
             builderAssistant.addParameterMap(id, parameterClass, parameterMappings);
+=======
+  }
+
+  private void resultMapElements(List<XNode> list) {
+    for (XNode resultMapNode : list) {
+      try {
+        resultMapElement(resultMapNode);
+      } catch (IncompleteElementException e) {
+        // ignore, it will be retried
+      }
+    }
+  }
+
+  private ResultMap resultMapElement(XNode resultMapNode) {
+    return resultMapElement(resultMapNode, Collections.emptyList(), null);
+  }
+
+  private ResultMap resultMapElement(XNode resultMapNode, List<ResultMapping> additionalResultMappings, Class<?> enclosingType) {
+    ErrorContext.instance().activity("processing " + resultMapNode.getValueBasedIdentifier());
+    String type = resultMapNode.getStringAttribute("type",
+        resultMapNode.getStringAttribute("ofType",
+            resultMapNode.getStringAttribute("resultType",
+                resultMapNode.getStringAttribute("javaType"))));
+    Class<?> typeClass = resolveClass(type);
+    if (typeClass == null) {
+      typeClass = inheritEnclosingType(resultMapNode, enclosingType);
+    }
+    Discriminator discriminator = null;
+    List<ResultMapping> resultMappings = new ArrayList<>(additionalResultMappings);
+    List<XNode> resultChildren = resultMapNode.getChildren();
+    for (XNode resultChild : resultChildren) {
+      if ("constructor".equals(resultChild.getName())) {
+        processConstructorElement(resultChild, typeClass, resultMappings);
+      } else if ("discriminator".equals(resultChild.getName())) {
+        discriminator = processDiscriminatorElement(resultChild, typeClass, resultMappings);
+      } else {
+        List<ResultFlag> flags = new ArrayList<>();
+        if ("id".equals(resultChild.getName())) {
+          flags.add(ResultFlag.ID);
+>>>>>>> mybatis-3-trunk/master
         }
     }
+<<<<<<< HEAD
 
     /**
      * 解析 <resultMap /> 节点们
@@ -358,6 +464,18 @@ public class XMLMapperBuilder extends BaseBuilder {
                 // ignore, it will be retried
             }
         }
+=======
+    String id = resultMapNode.getStringAttribute("id",
+            resultMapNode.getValueBasedIdentifier());
+    String extend = resultMapNode.getStringAttribute("extends");
+    Boolean autoMapping = resultMapNode.getBooleanAttribute("autoMapping");
+    ResultMapResolver resultMapResolver = new ResultMapResolver(builderAssistant, id, typeClass, extend, discriminator, resultMappings, autoMapping);
+    try {
+      return resultMapResolver.resolve();
+    } catch (IncompleteElementException e) {
+      configuration.addIncompleteResultMap(resultMapResolver);
+      throw e;
+>>>>>>> mybatis-3-trunk/master
     }
 
     /**
@@ -370,6 +488,7 @@ public class XMLMapperBuilder extends BaseBuilder {
     private ResultMap resultMapElement(XNode resultMapNode) throws Exception {
         return resultMapElement(resultMapNode, Collections.emptyList(), null);
     }
+<<<<<<< HEAD
 
     /**
      * 处理单个resultMap节点
@@ -461,6 +580,36 @@ public class XMLMapperBuilder extends BaseBuilder {
             return enclosingType;
         }
         return null;
+=======
+    return null;
+  }
+
+  private void processConstructorElement(XNode resultChild, Class<?> resultType, List<ResultMapping> resultMappings) {
+    List<XNode> argChildren = resultChild.getChildren();
+    for (XNode argChild : argChildren) {
+      List<ResultFlag> flags = new ArrayList<>();
+      flags.add(ResultFlag.CONSTRUCTOR);
+      if ("idArg".equals(argChild.getName())) {
+        flags.add(ResultFlag.ID);
+      }
+      resultMappings.add(buildResultMappingFromContext(argChild, resultType, flags));
+    }
+  }
+
+  private Discriminator processDiscriminatorElement(XNode context, Class<?> resultType, List<ResultMapping> resultMappings) {
+    String column = context.getStringAttribute("column");
+    String javaType = context.getStringAttribute("javaType");
+    String jdbcType = context.getStringAttribute("jdbcType");
+    String typeHandler = context.getStringAttribute("typeHandler");
+    Class<?> javaTypeClass = resolveClass(javaType);
+    Class<? extends TypeHandler<?>> typeHandlerClass = resolveClass(typeHandler);
+    JdbcType jdbcTypeEnum = resolveJdbcType(jdbcType);
+    Map<String, String> discriminatorMap = new HashMap<>();
+    for (XNode caseChild : context.getChildren()) {
+      String value = caseChild.getStringAttribute("value");
+      String resultMap = caseChild.getStringAttribute("resultMap", processNestedResultMappings(caseChild, resultMappings, resultType));
+      discriminatorMap.put(value, resultMap);
+>>>>>>> mybatis-3-trunk/master
     }
 
     /**
@@ -623,6 +772,7 @@ public class XMLMapperBuilder extends BaseBuilder {
         // 若存在，则判断原有的 sqlFragment 是否 databaseId 为空。因为，当前 databaseId 为空，这样两者才能匹配。
         return context.getStringAttribute("databaseId") == null;
     }
+<<<<<<< HEAD
 
     /**
      * 将当前节点构建成 ResultMapping 对象
@@ -732,6 +882,76 @@ public class XMLMapperBuilder extends BaseBuilder {
                 }
             }
         }
+=======
+    // skip this fragment if there is a previous one with a not null databaseId
+    XNode context = this.sqlFragments.get(id);
+    return context.getStringAttribute("databaseId") == null;
+  }
+
+  private ResultMapping buildResultMappingFromContext(XNode context, Class<?> resultType, List<ResultFlag> flags) {
+    String property;
+    if (flags.contains(ResultFlag.CONSTRUCTOR)) {
+      property = context.getStringAttribute("name");
+    } else {
+      property = context.getStringAttribute("property");
+    }
+    String column = context.getStringAttribute("column");
+    String javaType = context.getStringAttribute("javaType");
+    String jdbcType = context.getStringAttribute("jdbcType");
+    String nestedSelect = context.getStringAttribute("select");
+    String nestedResultMap = context.getStringAttribute("resultMap", () ->
+        processNestedResultMappings(context, Collections.emptyList(), resultType));
+    String notNullColumn = context.getStringAttribute("notNullColumn");
+    String columnPrefix = context.getStringAttribute("columnPrefix");
+    String typeHandler = context.getStringAttribute("typeHandler");
+    String resultSet = context.getStringAttribute("resultSet");
+    String foreignColumn = context.getStringAttribute("foreignColumn");
+    boolean lazy = "lazy".equals(context.getStringAttribute("fetchType", configuration.isLazyLoadingEnabled() ? "lazy" : "eager"));
+    Class<?> javaTypeClass = resolveClass(javaType);
+    Class<? extends TypeHandler<?>> typeHandlerClass = resolveClass(typeHandler);
+    JdbcType jdbcTypeEnum = resolveJdbcType(jdbcType);
+    return builderAssistant.buildResultMapping(resultType, property, column, javaTypeClass, jdbcTypeEnum, nestedSelect, nestedResultMap, notNullColumn, columnPrefix, typeHandlerClass, flags, resultSet, foreignColumn, lazy);
+  }
+
+  private String processNestedResultMappings(XNode context, List<ResultMapping> resultMappings, Class<?> enclosingType) {
+    if (Arrays.asList("association", "collection", "case").contains(context.getName())
+        && context.getStringAttribute("select") == null) {
+      validateCollection(context, enclosingType);
+      ResultMap resultMap = resultMapElement(context, resultMappings, enclosingType);
+      return resultMap.getId();
+    }
+    return null;
+  }
+
+  protected void validateCollection(XNode context, Class<?> enclosingType) {
+    if ("collection".equals(context.getName()) && context.getStringAttribute("resultMap") == null
+        && context.getStringAttribute("javaType") == null) {
+      MetaClass metaResultType = MetaClass.forClass(enclosingType, configuration.getReflectorFactory());
+      String property = context.getStringAttribute("property");
+      if (!metaResultType.hasSetter(property)) {
+        throw new BuilderException(
+            "Ambiguous collection type for property '" + property + "'. You must specify 'javaType' or 'resultMap'.");
+      }
+    }
+  }
+
+  private void bindMapperForNamespace() {
+    String namespace = builderAssistant.getCurrentNamespace();
+    if (namespace != null) {
+      Class<?> boundType = null;
+      try {
+        boundType = Resources.classForName(namespace);
+      } catch (ClassNotFoundException e) {
+        // ignore, bound type is not required
+      }
+      if (boundType != null && !configuration.hasMapper(boundType)) {
+        // Spring may not know the real resource name so we set a flag
+        // to prevent loading again this resource from the mapper interface
+        // look at MapperAnnotationBuilder#loadXmlResource
+        configuration.addLoadedResource("namespace:" + namespace);
+        configuration.addMapper(boundType);
+      }
+>>>>>>> mybatis-3-trunk/master
     }
 
 }

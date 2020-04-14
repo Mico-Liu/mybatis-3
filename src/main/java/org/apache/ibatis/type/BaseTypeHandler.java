@@ -1,4 +1,5 @@
 /**
+<<<<<<< HEAD
  * Copyright 2009-2019 the original author or authors.
  * <p>
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,6 +13,21 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
+=======
+ *    Copyright 2009-2020 the original author or authors.
+ *
+ *    Licensed under the Apache License, Version 2.0 (the "License");
+ *    you may not use this file except in compliance with the License.
+ *    You may obtain a copy of the License at
+ *
+ *       http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *    Unless required by applicable law or agreed to in writing, software
+ *    distributed under the License is distributed on an "AS IS" BASIS,
+ *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *    See the License for the specific language governing permissions and
+ *    limitations under the License.
+>>>>>>> mybatis-3-trunk/master
  */
 package org.apache.ibatis.type;
 
@@ -49,6 +65,10 @@ public abstract class BaseTypeHandler<T> extends TypeReference<T> implements Typ
   protected Configuration configuration;
 
   /**
+   * Sets the configuration.
+   *
+   * @param c
+   *          the new configuration
    * @deprecated Since 3.5.0 - See https://github.com/mybatis/mybatis-3/issues/1203. This property will remove future.
    */
   @Deprecated
@@ -130,12 +150,24 @@ public abstract class BaseTypeHandler<T> extends TypeReference<T> implements Typ
     throws SQLException;
 
   /**
+<<<<<<< HEAD
    * 抽象方法，获得指定结果的字段值
    *
    * @param rs
    * @param columnName
    * @return
    * @throws SQLException
+=======
+   * Gets the nullable result.
+   *
+   * @param rs
+   *          the rs
+   * @param columnName
+   *          Colunm name, when configuration <code>useColumnLabel</code> is <code>false</code>
+   * @return the nullable result
+   * @throws SQLException
+   *           the SQL exception
+>>>>>>> mybatis-3-trunk/master
    */
   public abstract T getNullableResult(ResultSet rs, String columnName) throws SQLException;
 

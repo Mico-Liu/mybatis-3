@@ -1,5 +1,5 @@
 /**
- *    Copyright 2009-2019 the original author or authors.
+ *    Copyright 2009-2020 the original author or authors.
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -197,8 +197,12 @@ public class PooledDataSource implements DataSource {
   }
 
   /**
+<<<<<<< HEAD
    * Sets the default network timeout value to wait for the database operation to complete. See
    * {@link Connection#setNetworkTimeout(java.util.concurrent.Executor, int)}
+=======
+   * Sets the default network timeout value to wait for the database operation to complete. See {@link Connection#setNetworkTimeout(java.util.concurrent.Executor, int)}
+>>>>>>> mybatis-3-trunk/master
    *
    * @param milliseconds
    *          The time in milliseconds to wait for the database operation to complete.
@@ -237,6 +241,10 @@ public class PooledDataSource implements DataSource {
    *
    * @param poolMaximumLocalBadConnectionTolerance
    *          max tolerance for bad connection happens in one thread
+<<<<<<< HEAD
+=======
+   *
+>>>>>>> mybatis-3-trunk/master
    * @since 3.4.5
    */
   public void setPoolMaximumLocalBadConnectionTolerance(int poolMaximumLocalBadConnectionTolerance) {
@@ -328,6 +336,9 @@ public class PooledDataSource implements DataSource {
   }
 
   /**
+   * Gets the default network timeout.
+   *
+   * @return the default network timeout
    * @since 3.5.2
    */
   public Integer getDefaultNetworkTimeout() {
@@ -659,6 +670,7 @@ public class PooledDataSource implements DataSource {
       result = false;
     }
 
+<<<<<<< HEAD
     if (result) {
       // 是否启用侦测查询
       if (poolPingEnabled) {
@@ -695,6 +707,35 @@ public class PooledDataSource implements DataSource {
               log.debug("Connection " + conn.getRealHashCode() + " is BAD: " + e.getMessage());
             }
           }
+=======
+    if (result && poolPingEnabled && poolPingConnectionsNotUsedFor >= 0
+        && conn.getTimeElapsedSinceLastUse() > poolPingConnectionsNotUsedFor) {
+      try {
+        if (log.isDebugEnabled()) {
+          log.debug("Testing connection " + conn.getRealHashCode() + " ...");
+        }
+        Connection realConn = conn.getRealConnection();
+        try (Statement statement = realConn.createStatement()) {
+          statement.executeQuery(poolPingQuery).close();
+        }
+        if (!realConn.getAutoCommit()) {
+          realConn.rollback();
+        }
+        result = true;
+        if (log.isDebugEnabled()) {
+          log.debug("Connection " + conn.getRealHashCode() + " is GOOD!");
+        }
+      } catch (Exception e) {
+        log.warn("Execution of ping query '" + poolPingQuery + "' failed: " + e.getMessage());
+        try {
+          conn.getRealConnection().close();
+        } catch (Exception e2) {
+          // ignore
+        }
+        result = false;
+        if (log.isDebugEnabled()) {
+          log.debug("Connection " + conn.getRealHashCode() + " is BAD: " + e.getMessage());
+>>>>>>> mybatis-3-trunk/master
         }
       }
     }
@@ -704,8 +745,11 @@ public class PooledDataSource implements DataSource {
   /**
    * Unwraps a pooled connection to get to the 'real' connection
    *
+<<<<<<< HEAD
    * 获取真实的数据库连接
    *
+=======
+>>>>>>> mybatis-3-trunk/master
    * @param conn
    *          - the pooled connection to unwrap
    * @return The 'real' connection

@@ -1,5 +1,5 @@
 /**
- *    Copyright 2009-2019 the original author or authors.
+ *    Copyright 2009-2020 the original author or authors.
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -277,9 +277,13 @@ class PooledConnection implements InvocationHandler {
   @Override
   public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
     String methodName = method.getName();
+<<<<<<< HEAD
     // <1> 判断是否为 CLOSE 方法，则将连接放回到连接池中，避免连接被关闭
     // 在realConnection调用close()方法时，不需要真实去关闭连接，把连接放回连接词即可，这里把连接放回连接池，重复使用
     if (CLOSE.hashCode() == methodName.hashCode() && CLOSE.equals(methodName)) {
+=======
+    if (CLOSE.equals(methodName)) {
+>>>>>>> mybatis-3-trunk/master
       dataSource.pushConnection(this);
       return null;
     }

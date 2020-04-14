@@ -74,14 +74,18 @@ public class DefaultObjectFactory implements ObjectFactory, Serializable {
           }
         }
       }
+<<<<<<< HEAD
       // <x2> 使用特定构造方法，创建指定类的对象
       constructor = type.getDeclaredConstructor(constructorArgTypes.toArray(new Class[constructorArgTypes.size()]));
+=======
+      constructor = type.getDeclaredConstructor(constructorArgTypes.toArray(new Class[0]));
+>>>>>>> mybatis-3-trunk/master
       try {
-        return constructor.newInstance(constructorArgs.toArray(new Object[constructorArgs.size()]));
+        return constructor.newInstance(constructorArgs.toArray(new Object[0]));
       } catch (IllegalAccessException e) {
         if (Reflector.canControlMemberAccessible()) {
           constructor.setAccessible(true);
-          return constructor.newInstance(constructorArgs.toArray(new Object[constructorArgs.size()]));
+          return constructor.newInstance(constructorArgs.toArray(new Object[0]));
         } else {
           throw e;
         }

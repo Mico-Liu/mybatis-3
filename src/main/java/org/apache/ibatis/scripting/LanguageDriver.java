@@ -1,5 +1,5 @@
 /**
- *    Copyright 2009-2019 the original author or authors.
+ *    Copyright 2009-2020 the original author or authors.
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -28,6 +28,7 @@ public interface LanguageDriver {
   /**
    * Creates a {@link ParameterHandler} that passes the actual parameters to the the JDBC statement.
    *
+<<<<<<< HEAD
    *  创建 ParameterHandler 对象。
    *
    * @param mappedStatement
@@ -38,6 +39,13 @@ public interface LanguageDriver {
    *          The resulting SQL once the dynamic language has been executed.
    * @return
    * @author Frank D. Martinez [mnesarco]
+=======
+   * @author Frank D. Martinez [mnesarco]
+   * @param mappedStatement The mapped statement that is being executed
+   * @param parameterObject The input parameter object (can be null)
+   * @param boundSql The resulting SQL once the dynamic language has been executed.
+   * @return the parameter handler
+>>>>>>> mybatis-3-trunk/master
    * @see DefaultParameterHandler
    */
   ParameterHandler createParameterHandler(MappedStatement mappedStatement, Object parameterObject, BoundSql boundSql);
@@ -47,6 +55,7 @@ public interface LanguageDriver {
    * when the mapped statement is read from a class or an xml file.
    *
    *
+<<<<<<< HEAD
    * 创建 SqlSource 对象，从 Mapper XML 配置的 Statement 标签中，即 <select /> 等。
    *
    * @param configuration
@@ -57,6 +66,12 @@ public interface LanguageDriver {
    *          input parameter type got from a mapper method or specified in the parameterType xml attribute. Can be
    *          null.
    * @return
+=======
+   * @param configuration The MyBatis configuration
+   * @param script XNode parsed from a XML file
+   * @param parameterType input parameter type got from a mapper method or specified in the parameterType xml attribute. Can be null.
+   * @return the sql source
+>>>>>>> mybatis-3-trunk/master
    */
   SqlSource createSqlSource(Configuration configuration, XNode script, Class<?> parameterType);
 
@@ -66,6 +81,7 @@ public interface LanguageDriver {
    *
    * 创建 SqlSource 对象，从方法注解配置，即 @Select 等。
    *
+<<<<<<< HEAD
    * @param configuration
    *          The MyBatis configuration
    * @param script
@@ -74,6 +90,12 @@ public interface LanguageDriver {
    *          input parameter type got from a mapper method or specified in the parameterType xml attribute. Can be
    *          null.
    * @return
+=======
+   * @param configuration The MyBatis configuration
+   * @param script The content of the annotation
+   * @param parameterType input parameter type got from a mapper method or specified in the parameterType xml attribute. Can be null.
+   * @return the sql source
+>>>>>>> mybatis-3-trunk/master
    */
   SqlSource createSqlSource(Configuration configuration, String script, Class<?> parameterType);
 

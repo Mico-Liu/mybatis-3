@@ -1,5 +1,5 @@
 /**
- *    Copyright 2009-2019 the original author or authors.
+ *    Copyright 2009-2020 the original author or authors.
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -32,6 +32,7 @@ public interface Transaction {
    * 
    * @return DataBase connection
    * @throws SQLException
+   *           the SQL exception
    */
   Connection getConnection() throws SQLException;
 
@@ -40,6 +41,7 @@ public interface Transaction {
    * Commit inner database connection.
    * 
    * @throws SQLException
+   *           the SQL exception
    */
   void commit() throws SQLException;
 
@@ -48,6 +50,7 @@ public interface Transaction {
    * Rollback inner database connection.
    * 
    * @throws SQLException
+   *           the SQL exception
    */
   void rollback() throws SQLException;
 
@@ -56,14 +59,21 @@ public interface Transaction {
    * Close inner database connection.
    * 
    * @throws SQLException
+   *           the SQL exception
    */
   void close() throws SQLException;
 
   /**
    * 获得事务超时时间
    * Get transaction timeout if set.
+<<<<<<< HEAD
    * 
+=======
+   *
+   * @return the timeout
+>>>>>>> mybatis-3-trunk/master
    * @throws SQLException
+   *           the SQL exception
    */
   Integer getTimeout() throws SQLException;
 

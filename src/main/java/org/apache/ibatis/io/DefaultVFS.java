@@ -1,4 +1,5 @@
 /**
+<<<<<<< HEAD
  * Copyright 2009-2019 the original author or authors.
  * <p>
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,6 +13,21 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
+=======
+ *    Copyright 2009-2020 the original author or authors.
+ *
+ *    Licensed under the Apache License, Version 2.0 (the "License");
+ *    you may not use this file except in compliance with the License.
+ *    You may obtain a copy of the License at
+ *
+ *       http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *    Unless required by applicable law or agreed to in writing, software
+ *    distributed under the License is distributed on an "AS IS" BASIS,
+ *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *    See the License for the specific language governing permissions and
+ *    limitations under the License.
+>>>>>>> mybatis-3-trunk/master
  */
 package org.apache.ibatis.io;
 
@@ -103,8 +119,8 @@ public class DefaultVFS extends VFS {
              */
             // 【重点】<1> 获得路径下的所有资源
             is = url.openStream();
-            BufferedReader reader = new BufferedReader(new InputStreamReader(is));
             List<String> lines = new ArrayList<>();
+<<<<<<< HEAD
             for (String line; (line = reader.readLine()) != null; ) {
               if (log.isDebugEnabled()) {
                 log.debug("Reader entry: " + line);
@@ -113,9 +129,20 @@ public class DefaultVFS extends VFS {
               if (getResources(path + "/" + line).isEmpty()) {
                 lines.clear();
                 break;
+=======
+            try (BufferedReader reader = new BufferedReader(new InputStreamReader(is))) {
+              for (String line; (line = reader.readLine()) != null;) {
+                if (log.isDebugEnabled()) {
+                  log.debug("Reader entry: " + line);
+                }
+                lines.add(line);
+                if (getResources(path + "/" + line).isEmpty()) {
+                  lines.clear();
+                  break;
+                }
+>>>>>>> mybatis-3-trunk/master
               }
             }
-
             if (!lines.isEmpty()) {
               if (log.isDebugEnabled()) {
                 log.debug("Listing " + url);
@@ -236,6 +263,7 @@ public class DefaultVFS extends VFS {
    *          The URL of the JAR entry.
    * @return The URL of the JAR file, if one is found. Null if not.
    * @throws MalformedURLException
+   *           the malformed URL exception
    */
   protected URL findJarForResource(URL url) throws MalformedURLException {
     if (log.isDebugEnabled()) {
@@ -243,17 +271,24 @@ public class DefaultVFS extends VFS {
     }
 
     // If the file part of the URL is itself a URL, then that URL probably points to the JAR
+<<<<<<< HEAD
     // 这段代码看起来比较神奇，虽然看起来没有 break 的条件，但是是通过 MalformedURLException 异常进行
     // 正如上面英文注释，如果 URL 的文件部分本身就是 URL ，那么该 URL 可能指向 JAR
     try {
       for (; ; ) {
+=======
+    boolean continueLoop = true;
+    while (continueLoop) {
+      try {
+>>>>>>> mybatis-3-trunk/master
         url = new URL(url.getFile());
         if (log.isDebugEnabled()) {
           log.debug("Inner URL: " + url);
         }
+      } catch (MalformedURLException e) {
+        // This will happen at some point and serves as a break in the loop
+        continueLoop = false;
       }
-    } catch (MalformedURLException e) {
-      // This will happen at some point and serves as a break in the loop
     }
 
     // Look for the .jar extension and chop off everything after that
@@ -326,6 +361,10 @@ public class DefaultVFS extends VFS {
    *
    * @param packageName
    *          The Java package name to convert to a path
+<<<<<<< HEAD
+=======
+   * @return the package path
+>>>>>>> mybatis-3-trunk/master
    */
   protected String getPackagePath(String packageName) {
     return packageName == null ? null : packageName.replace('.', '/');
@@ -338,6 +377,10 @@ public class DefaultVFS extends VFS {
    *
    * @param url
    *          The URL of the resource to test.
+<<<<<<< HEAD
+=======
+   * @return true, if is jar
+>>>>>>> mybatis-3-trunk/master
    */
   protected boolean isJar(URL url) {
     return isJar(url, new byte[JAR_MAGIC.length]);
@@ -353,6 +396,10 @@ public class DefaultVFS extends VFS {
    * @param buffer
    *          A buffer into which the first few bytes of the resource are read. The buffer must be at least the size of
    *          {@link #JAR_MAGIC}. (The same buffer may be reused for multiple calls as an optimization.)
+<<<<<<< HEAD
+=======
+   * @return true, if is jar
+>>>>>>> mybatis-3-trunk/master
    */
   protected boolean isJar(URL url, byte[] buffer) {
     InputStream is = null;

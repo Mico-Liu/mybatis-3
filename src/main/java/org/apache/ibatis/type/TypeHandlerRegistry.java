@@ -1,4 +1,5 @@
 /**
+<<<<<<< HEAD
  * Copyright 2009-2019 the original author or authors.
  * <p>
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,6 +13,21 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
+=======
+ *    Copyright 2009-2020 the original author or authors.
+ *
+ *    Licensed under the Apache License, Version 2.0 (the "License");
+ *    you may not use this file except in compliance with the License.
+ *    You may obtain a copy of the License at
+ *
+ *       http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *    Unless required by applicable law or agreed to in writing, software
+ *    distributed under the License is distributed on an "AS IS" BASIS,
+ *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *    See the License for the specific language governing permissions and
+ *    limitations under the License.
+>>>>>>> mybatis-3-trunk/master
  */
 package org.apache.ibatis.type;
 
@@ -32,6 +48,14 @@ import java.util.*;
 import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentHashMap;
 
+<<<<<<< HEAD
+=======
+import org.apache.ibatis.binding.MapperMethod.ParamMap;
+import org.apache.ibatis.io.ResolverUtil;
+import org.apache.ibatis.io.Resources;
+import org.apache.ibatis.session.Configuration;
+
+>>>>>>> mybatis-3-trunk/master
 /**
  * TypeHandler 注册表，相当于管理 TypeHandler 的容器，从其中能获取到对应的 TypeHandler
  *
@@ -67,6 +91,7 @@ public final class TypeHandlerRegistry {
    * VALUE：{@link TypeHandler} 对象
    */
   private final Map<Type, Map<JdbcType, TypeHandler<?>>> typeHandlerMap = new ConcurrentHashMap<>();
+<<<<<<< HEAD
 
   /**
    * {@link UnknownTypeHandler} 对象
@@ -79,6 +104,9 @@ public final class TypeHandlerRegistry {
    * KEY：{@link TypeHandler#getClass()}
    * VALUE：{@link TypeHandler} 对象
    */
+=======
+  private final TypeHandler<Object> unknownTypeHandler;
+>>>>>>> mybatis-3-trunk/master
   private final Map<Class<?>, TypeHandler<?>> allTypeHandlersMap = new HashMap<>();
 
   /**
@@ -93,7 +121,22 @@ public final class TypeHandlerRegistry {
    */
   private Class<? extends TypeHandler> defaultEnumTypeHandler = EnumTypeHandler.class;
 
+  /**
+   * The default constructor.
+   */
   public TypeHandlerRegistry() {
+    this(new Configuration());
+  }
+
+  /**
+   * The constructor that pass the MyBatis configuration.
+   *
+   * @param configuration a MyBatis configuration
+   * @since 3.5.4
+   */
+  public TypeHandlerRegistry(Configuration configuration) {
+    this.unknownTypeHandler = new UnknownTypeHandler(configuration);
+
     register(Boolean.class, new BooleanTypeHandler());
     register(boolean.class, new BooleanTypeHandler());
     register(JdbcType.BOOLEAN, new BooleanTypeHandler());
@@ -499,6 +542,8 @@ public final class TypeHandlerRegistry {
 
   // java type + jdbc type + handler
 
+  // Cast is required here
+  @SuppressWarnings("cast")
   public <T> void register(Class<T> type, JdbcType jdbcType, TypeHandler<? extends T> handler) {
     register((Type) type, jdbcType, handler);
   }
@@ -518,10 +563,10 @@ public final class TypeHandlerRegistry {
       // 如果不存在，则进行创建
       if (map == null || map == NULL_TYPE_HANDLER_MAP) {
         map = new HashMap<>();
-        typeHandlerMap.put(javaType, map);
       }
       // 添加到 handler 中 map 中
       map.put(jdbcType, handler);
+      typeHandlerMap.put(javaType, map);
     }
     // <2> 添加 handler 到 allTypeHandlersMap 中
     allTypeHandlersMap.put(handler.getClass(), handler);
@@ -632,6 +677,9 @@ public final class TypeHandlerRegistry {
   // get information
 
   /**
+   * Gets the type handlers.
+   *
+   * @return the type handlers
    * @since 3.2.2
    */
   public Collection<TypeHandler<?>> getTypeHandlers() {

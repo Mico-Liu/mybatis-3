@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
+import javax.xml.XMLConstants;
 import javax.xml.namespace.QName;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -284,7 +285,12 @@ public class XPathParser {
     try {
       // 1> 创建 DocumentBuilderFactory 对象`
       DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+<<<<<<< HEAD
       factory.setValidating(validation); // 设置是否验证 XML
+=======
+      factory.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
+      factory.setValidating(validation);
+>>>>>>> mybatis-3-trunk/master
 
       factory.setNamespaceAware(false);
       factory.setIgnoringComments(true);
@@ -307,6 +313,7 @@ public class XPathParser {
 
         @Override
         public void warning(SAXParseException exception) throws SAXException {
+          // NOP
         }
       });
       // 3> 解析 XML 文件

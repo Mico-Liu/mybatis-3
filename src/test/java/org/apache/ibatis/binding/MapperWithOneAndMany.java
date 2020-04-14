@@ -28,7 +28,15 @@ public interface MapperWithOneAndMany {
 
   @Select({ "SELECT *", "FROM blog" })
   @Results({
+<<<<<<< HEAD
       @Result(property = "author", column = "author_id", one = @One(select = "org.apache.ibatis.binding.BoundAuthorMapper.selectAuthor"), many = @Many(select = "selectPostsById")) })
+=======
+    @Result(
+       property = "author", column = "author_id",
+       one = @One(select = "org.apache.ibatis.binding.BoundAuthorMapper.selectAuthor"),
+       many = @Many(select = "org.apache.ibatis.binding.BoundBlogMapper.selectPostsById"))
+  })
+>>>>>>> mybatis-3-trunk/master
   List<Blog> selectWithBothOneAndMany();
 
 }

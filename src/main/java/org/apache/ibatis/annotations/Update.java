@@ -1,5 +1,5 @@
 /**
- *    Copyright 2009-2016 the original author or authors.
+ *    Copyright 2009-2020 the original author or authors.
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -22,6 +22,18 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
+ * The annotation that specify an SQL for updating record(s).
+ *
+ * <p>
+ * <b>How to use:</b>
+ *
+ * <pre>
+ * public interface UserMapper {
+ *   &#064;Update("UPDATE users SET name = #{name} WHERE id = #{id}")
+ *   boolean update(User user);
+ * }
+ * </pre>
+ *
  * @author Clinton Begin
  */
 @Documented
@@ -29,7 +41,13 @@ import java.lang.annotation.Target;
 @Target(ElementType.METHOD)// 方法
 public @interface Update {
   /**
+<<<<<<< HEAD
    * @return 更新语句
+=======
+   * Returns an SQL for updating record(s).
+   *
+   * @return an SQL for updating record(s)
+>>>>>>> mybatis-3-trunk/master
    */
   String[] value();
 }

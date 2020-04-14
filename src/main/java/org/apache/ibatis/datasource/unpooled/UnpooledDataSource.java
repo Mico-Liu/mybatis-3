@@ -1,5 +1,5 @@
 /**
- *    Copyright 2009-2019 the original author or authors.
+ *    Copyright 2009-2020 the original author or authors.
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -174,7 +174,7 @@ public class UnpooledDataSource implements DataSource {
     this.driverProperties = driverProperties;
   }
 
-  public String getDriver() {
+  public synchronized String getDriver() {
     return driver;
   }
 
@@ -223,6 +223,9 @@ public class UnpooledDataSource implements DataSource {
   }
 
   /**
+   * Gets the default network timeout.
+   *
+   * @return the default network timeout
    * @since 3.5.2
    */
   public Integer getDefaultNetworkTimeout() {
@@ -286,8 +289,11 @@ public class UnpooledDataSource implements DataSource {
         // DriverManager requires the driver to be loaded via the system ClassLoader.
         // http://www.kfu.com/~nsayer/Java/dyn-jdbc.html
         Driver driverInstance = (Driver) driverType.getDeclaredConstructor().newInstance();
+<<<<<<< HEAD
         // 创建 DriverProxy 对象，并注册到 DriverManager 中
         // 使用DriverProxy，主要重写了日志的实现，使用mybatis自己的Log
+=======
+>>>>>>> mybatis-3-trunk/master
         DriverManager.registerDriver(new DriverProxy(driverInstance));
         // 添加到 registeredDrivers 中
         registeredDrivers.put(driver, driverInstance);

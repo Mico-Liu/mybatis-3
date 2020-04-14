@@ -35,16 +35,28 @@ import java.lang.annotation.Target;
 public @interface Property {
 
   /**
+<<<<<<< HEAD
    * 属性名
    *
    * A target property name.
+=======
+   * Returns the property name.
+   *
+   * @return the property name
+>>>>>>> mybatis-3-trunk/master
    */
   String name();
 
   /**
+<<<<<<< HEAD
    * 属性值
    *
    * A property value or placeholder.
+=======
+   * Returns the property value or placeholder.
+   *
+   * @return the property value or placeholder
+>>>>>>> mybatis-3-trunk/master
    */
   String value();
 }

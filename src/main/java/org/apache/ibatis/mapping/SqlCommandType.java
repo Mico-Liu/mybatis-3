@@ -19,10 +19,14 @@ package org.apache.ibatis.mapping;
  * @author Clinton Begin
  */
 public enum SqlCommandType {
+<<<<<<< HEAD
   UNKNOWN,
   INSERT,
   UPDATE,
   DELETE,
   SELECT,
   FLUSH;
+=======
+  UNKNOWN, INSERT, UPDATE, DELETE, SELECT, FLUSH
+>>>>>>> mybatis-3-trunk/master
 }

@@ -1,4 +1,5 @@
 /**
+<<<<<<< HEAD
  * Copyright 2009-2019 the original author or authors.
  * <p>
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,6 +13,21 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
+=======
+ *    Copyright 2009-2020 the original author or authors.
+ *
+ *    Licensed under the Apache License, Version 2.0 (the "License");
+ *    you may not use this file except in compliance with the License.
+ *    You may obtain a copy of the License at
+ *
+ *       http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *    Unless required by applicable law or agreed to in writing, software
+ *    distributed under the License is distributed on an "AS IS" BASIS,
+ *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *    See the License for the specific language governing permissions and
+ *    limitations under the License.
+>>>>>>> mybatis-3-trunk/master
  */
 package org.apache.ibatis.reflection;
 
@@ -28,8 +44,17 @@ import java.util.Arrays;
 public class TypeParameterResolver {
 
   /**
+<<<<<<< HEAD
    * 解析属性类型
    *
+=======
+   * Resolve field type.
+   *
+   * @param field
+   *          the field
+   * @param srcType
+   *          the src type
+>>>>>>> mybatis-3-trunk/master
    * @return The field type as {@link Type}. If it has type parameters in the declaration,<br>
    * they will be resolved to the actual runtime {@link Type}s.
    */
@@ -43,8 +68,17 @@ public class TypeParameterResolver {
   }
 
   /**
+<<<<<<< HEAD
    * 解析方法返回类型
    *
+=======
+   * Resolve return type.
+   *
+   * @param method
+   *          the method
+   * @param srcType
+   *          the src type
+>>>>>>> mybatis-3-trunk/master
    * @return The return type of the method as {@link Type}. If it has type parameters in the declaration,<br>
    * they will be resolved to the actual runtime {@link Type}s.
    */
@@ -58,11 +92,23 @@ public class TypeParameterResolver {
   }
 
   /**
+<<<<<<< HEAD
    * 解析方法参数的类型数组
    *
    * @return The parameter types of the method as an array of {@link Type}s. If they have type parameters in the
    * declaration,<br>
    * they will be resolved to the actual runtime {@link Type}s.
+=======
+   * Resolve param types.
+   *
+   * @param method
+   *          the method
+   * @param srcType
+   *          the src type
+   * @return The parameter types of the method as an array of {@link Type}s. If they have type parameters in the
+   *         declaration,<br>
+   *         they will be resolved to the actual runtime {@link Type}s.
+>>>>>>> mybatis-3-trunk/master
    */
   public static Type[] resolveParamTypes(Method method, Type srcType) {
     // 获得方法参数类型数组
@@ -246,7 +292,7 @@ public class TypeParameterResolver {
       }
       if (declaringClass == parentAsClass) {
         for (int i = 0; i < parentTypeVars.length; i++) {
-          if (typeVar == parentTypeVars[i]) {
+          if (typeVar.equals(parentTypeVars[i])) {
             return parentAsType.getActualTypeArguments()[i];
           }
         }
@@ -270,7 +316,7 @@ public class TypeParameterResolver {
     for (int i = 0; i < parentTypeArgs.length; i++) {
       if (parentTypeArgs[i] instanceof TypeVariable) {
         for (int j = 0; j < srcTypeVars.length; j++) {
-          if (srcTypeVars[j] == parentTypeArgs[i]) {
+          if (srcTypeVars[j].equals(parentTypeArgs[i])) {
             noChange = false;
             newParentArgs[i] = srcTypeArgs[j];
           }

@@ -1,4 +1,5 @@
 /**
+<<<<<<< HEAD
  * Copyright 2009-2019 the original author or authors.
  * <p>
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,6 +13,21 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
+=======
+ *    Copyright 2009-2020 the original author or authors.
+ *
+ *    Licensed under the Apache License, Version 2.0 (the "License");
+ *    you may not use this file except in compliance with the License.
+ *    You may obtain a copy of the License at
+ *
+ *       http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *    Unless required by applicable law or agreed to in writing, software
+ *    distributed under the License is distributed on an "AS IS" BASIS,
+ *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *    See the License for the specific language governing permissions and
+ *    limitations under the License.
+>>>>>>> mybatis-3-trunk/master
  */
 package org.apache.ibatis.reflection;
 
@@ -23,8 +39,11 @@ import org.apache.ibatis.session.RowBounds;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
+import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
@@ -33,7 +52,9 @@ import java.util.TreeMap;
  */
 public class ParamNameResolver {
 
-  private static final String GENERIC_NAME_PREFIX = "param";
+  public static final String GENERIC_NAME_PREFIX = "param";
+
+  private final boolean useActualParamName;
 
   /**
    * <p>
@@ -64,7 +85,11 @@ public class ParamNameResolver {
    * @param method 方法
    */
   public ParamNameResolver(Configuration config, Method method) {
+<<<<<<< HEAD
     //获取所有方法参数类型
+=======
+    this.useActualParamName = config.isUseActualParamName();
+>>>>>>> mybatis-3-trunk/master
     final Class<?>[] paramTypes = method.getParameterTypes();
     //获取方法的所有注解
     final Annotation[][] paramAnnotations = method.getParameterAnnotations();
@@ -91,10 +116,14 @@ public class ParamNameResolver {
       //如果没有配置Param注解
       if (name == null) {
         // @Param was not specified.
+<<<<<<< HEAD
         // 其次，获取真实的参数名
         // 默认是开启的
         if (config.isUseActualParamName()) {
           //获取指定的参数名
+=======
+        if (useActualParamName) {
+>>>>>>> mybatis-3-trunk/master
           name = getActualParamName(method, paramIndex);
         }
         // 最差，使用 map 的顺序，作为编号
@@ -139,6 +168,8 @@ public class ParamNameResolver {
    * 参数名的集合
    * <p>
    * Returns parameter names referenced by SQL providers.
+   *
+   * @return the names
    */
   public String[] getNames() {
     return names.values().toArray(new String[0]);
@@ -151,17 +182,30 @@ public class ParamNameResolver {
    * A single non-special parameter is returned without a name. Multiple parameters are named using the naming rule. In
    * addition to the default names, this method also adds the generic names (param1, param2, ...).
    * </p>
+<<<<<<< HEAD
    * 获得参数名与值的映射
+=======
+   *
+   * @param args
+   *          the args
+   * @return the named params
+>>>>>>> mybatis-3-trunk/master
    */
   public Object getNamedParams(Object[] args) {
     final int paramCount = names.size();
     // 无参数，则返回 null
     if (args == null || paramCount == 0) {
       return null;
+<<<<<<< HEAD
     }
     // 只有一个非注解的参数，直接返回首元素
     else if (!hasParamAnnotation && paramCount == 1) {
       return args[names.firstKey()];
+=======
+    } else if (!hasParamAnnotation && paramCount == 1) {
+      Object value = args[names.firstKey()];
+      return wrapToMapIfCollection(value, useActualParamName ? names.get(0) : null);
+>>>>>>> mybatis-3-trunk/master
     } else {
       // 集合。
       // 组合 1 ：KEY：参数名，VALUE：参数值
@@ -176,8 +220,12 @@ public class ParamNameResolver {
         param.put(entry.getValue(), args[entry.getKey()]);
 
         // add generic param names (param1, param2, ...)
+<<<<<<< HEAD
         // 组合 2 ：添加到 param 中
         final String genericParamName = GENERIC_NAME_PREFIX + String.valueOf(i + 1);
+=======
+        final String genericParamName = GENERIC_NAME_PREFIX + (i + 1);
+>>>>>>> mybatis-3-trunk/master
         // ensure not to overwrite parameter named with @Param
         if (!names.containsValue(genericParamName)) {
           param.put(genericParamName, args[entry.getKey()]);
@@ -187,4 +235,32 @@ public class ParamNameResolver {
       return param;
     }
   }
+
+  /**
+   * Wrap to a {@link ParamMap} if object is {@link Collection} or array.
+   *
+   * @param object a parameter object
+   * @param actualParamName an actual parameter name
+   *                        (If specify a name, set an object to {@link ParamMap} with specified name)
+   * @return a {@link ParamMap}
+   * @since 3.5.5
+   */
+  public static Object wrapToMapIfCollection(Object object, String actualParamName) {
+    if (object instanceof Collection) {
+      ParamMap<Object> map = new ParamMap<>();
+      map.put("collection", object);
+      if (object instanceof List) {
+        map.put("list", object);
+      }
+      Optional.ofNullable(actualParamName).ifPresent(name -> map.put(name, object));
+      return map;
+    } else if (object != null && object.getClass().isArray()) {
+      ParamMap<Object> map = new ParamMap<>();
+      map.put("array", object);
+      Optional.ofNullable(actualParamName).ifPresent(name -> map.put(name, object));
+      return map;
+    }
+    return object;
+  }
+
 }

@@ -1,4 +1,5 @@
 /**
+<<<<<<< HEAD
  * Copyright 2009-2019 the original author or authors.
  * <p>
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,6 +16,44 @@
  */
 package org.apache.ibatis.reflection;
 
+=======
+ *    Copyright 2009-2020 the original author or authors.
+ *
+ *    Licensed under the Apache License, Version 2.0 (the "License");
+ *    you may not use this file except in compliance with the License.
+ *    You may obtain a copy of the License at
+ *
+ *       http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *    Unless required by applicable law or agreed to in writing, software
+ *    distributed under the License is distributed on an "AS IS" BASIS,
+ *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *    See the License for the specific language governing permissions and
+ *    limitations under the License.
+ */
+package org.apache.ibatis.reflection;
+
+import java.lang.reflect.Array;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
+import java.lang.reflect.GenericArrayType;
+import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.ReflectPermission;
+import java.lang.reflect.Type;
+import java.text.MessageFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Map.Entry;
+
+import org.apache.ibatis.reflection.invoker.AmbiguousMethodInvoker;
+>>>>>>> mybatis-3-trunk/master
 import org.apache.ibatis.reflection.invoker.GetFieldInvoker;
 import org.apache.ibatis.reflection.invoker.Invoker;
 import org.apache.ibatis.reflection.invoker.MethodInvoker;
@@ -148,6 +187,7 @@ public class Reflector {
       // 最匹配的方法
       Method winner = null;
       String propName = entry.getKey();
+      boolean isAmbiguous = false;
       for (Method candidate : entry.getValue()) {
         // winner 为空，说明 candidate 为最匹配的方法
         if (winner == null) {
@@ -161,12 +201,18 @@ public class Reflector {
         if (candidateType.equals(winnerType)) {
           // 返回值了诶选哪个相同，应该在 getClassMethods 方法中，已经合并。所以抛出 ReflectionException 异常
           if (!boolean.class.equals(candidateType)) {
+<<<<<<< HEAD
             throw new ReflectionException("Illegal overloaded getter method with ambiguous type for property "
               + propName + " in class " + winner.getDeclaringClass()
               + ". This breaks the JavaBeans specification and can cause unpredictable results.");
           }
           // 选择 boolean 类型的 is 方法
           else if (candidate.getName().startsWith("is")) {
+=======
+            isAmbiguous = true;
+            break;
+          } else if (candidate.getName().startsWith("is")) {
+>>>>>>> mybatis-3-trunk/master
             winner = candidate;
           }
         }
@@ -185,6 +231,7 @@ public class Reflector {
         else if (winnerType.isAssignableFrom(candidateType)) {
           //如果winnerType是candidateType的父类或接口，则使用candidate
           winner = candidate;
+<<<<<<< HEAD
         }
         // <1.2> 返回类型冲突，抛出 ReflectionException 异常
         else {
@@ -207,6 +254,26 @@ public class Reflector {
       Type returnType = TypeParameterResolver.resolveReturnType(method, type);
       getTypes.put(name, typeToClass(returnType));
     }
+=======
+        } else {
+          isAmbiguous = true;
+          break;
+        }
+      }
+      addGetMethod(propName, winner, isAmbiguous);
+    }
+  }
+
+  private void addGetMethod(String name, Method method, boolean isAmbiguous) {
+    MethodInvoker invoker = isAmbiguous
+        ? new AmbiguousMethodInvoker(method, MessageFormat.format(
+            "Illegal overloaded getter method with ambiguous type for property ''{0}'' in class ''{1}''. This breaks the JavaBeans specification and can cause unpredictable results.",
+            name, method.getDeclaringClass().getName()))
+        : new MethodInvoker(method);
+    getMethods.put(name, invoker);
+    Type returnType = TypeParameterResolver.resolveReturnType(method, type);
+    getTypes.put(name, typeToClass(returnType));
+>>>>>>> mybatis-3-trunk/master
   }
 
   private void addSetMethods(Class<?> clazz) {
@@ -224,9 +291,16 @@ public class Reflector {
   }
 
   private void addMethodConflict(Map<String, List<Method>> conflictingMethods, String name, Method method) {
+<<<<<<< HEAD
     //如果不存在，则创建List
     List<Method> list = conflictingMethods.computeIfAbsent(name, k -> new ArrayList<>());
     list.add(method);
+=======
+    if (isValidPropertyName(name)) {
+      List<Method> list = conflictingMethods.computeIfAbsent(name, k -> new ArrayList<>());
+      list.add(method);
+    }
+>>>>>>> mybatis-3-trunk/master
   }
 
   /**
@@ -237,21 +311,35 @@ public class Reflector {
    * @param conflictingSetters
    */
   private void resolveSetterConflicts(Map<String, List<Method>> conflictingSetters) {
+<<<<<<< HEAD
     // 遍历每个属性，查找其最匹配的方法。因为子类可以覆写父类的方法，所以一个属性，可能对应多个 setting 方法
     for (String propName : conflictingSetters.keySet()) {
       List<Method> setters = conflictingSetters.get(propName);
       //属性名对应的get方法
+=======
+    for (Entry<String, List<Method>> entry : conflictingSetters.entrySet()) {
+      String propName = entry.getKey();
+      List<Method> setters = entry.getValue();
+>>>>>>> mybatis-3-trunk/master
       Class<?> getterType = getTypes.get(propName);
+      boolean isGetterAmbiguous = getMethods.get(propName) instanceof AmbiguousMethodInvoker;
+      boolean isSetterAmbiguous = false;
       Method match = null;
+<<<<<<< HEAD
       ReflectionException exception = null;
       // <1> 遍历属性对应的 setting 方法
       for (Method setter : setters) {
         // set方法的第一个参数类型和getterType的类型相同，则直接使用
         if (setter.getParameterTypes()[0].equals(getterType)) {
+=======
+      for (Method setter : setters) {
+        if (!isGetterAmbiguous && setter.getParameterTypes()[0].equals(getterType)) {
+>>>>>>> mybatis-3-trunk/master
           // should be the best match
           match = setter;
           break;
         }
+<<<<<<< HEAD
         if (exception == null) {
           try {
             // 选择一个更加匹配的方法
@@ -268,6 +356,14 @@ public class Reflector {
         throw exception;
       } else {
 
+=======
+        if (!isSetterAmbiguous) {
+          match = pickBetterSetter(match, setter, propName);
+          isSetterAmbiguous = match == null;
+        }
+      }
+      if (match != null) {
+>>>>>>> mybatis-3-trunk/master
         addSetMethod(propName, match);
       }
     }
@@ -291,6 +387,7 @@ public class Reflector {
     } else if (paramType2.isAssignableFrom(paramType1)) {
       return setter1;
     }
+<<<<<<< HEAD
     //如果都不是，则抛出异常
     throw new ReflectionException(
       "Ambiguous setters defined for property '" + property + "' in class '" + setter2.getDeclaringClass()
@@ -305,6 +402,23 @@ public class Reflector {
       Type[] paramTypes = TypeParameterResolver.resolveParamTypes(method, type);
       setTypes.put(name, typeToClass(paramTypes[0]));
     }
+=======
+    MethodInvoker invoker = new AmbiguousMethodInvoker(setter1,
+        MessageFormat.format(
+            "Ambiguous setters defined for property ''{0}'' in class ''{1}'' with types ''{2}'' and ''{3}''.",
+            property, setter2.getDeclaringClass().getName(), paramType1.getName(), paramType2.getName()));
+    setMethods.put(property, invoker);
+    Type[] paramTypes = TypeParameterResolver.resolveParamTypes(setter1, type);
+    setTypes.put(property, typeToClass(paramTypes[0]));
+    return null;
+  }
+
+  private void addSetMethod(String name, Method method) {
+    MethodInvoker invoker = new MethodInvoker(method);
+    setMethods.put(name, invoker);
+    Type[] paramTypes = TypeParameterResolver.resolveParamTypes(method, type);
+    setTypes.put(name, typeToClass(paramTypes[0]));
+>>>>>>> mybatis-3-trunk/master
   }
 
   /**
@@ -583,7 +697,7 @@ public class Reflector {
    * @return True if the object has a writable property by the name
    */
   public boolean hasSetter(String propertyName) {
-    return setMethods.keySet().contains(propertyName);
+    return setMethods.containsKey(propertyName);
   }
 
   /**
@@ -593,7 +707,7 @@ public class Reflector {
    * @return True if the object has a readable property by the name
    */
   public boolean hasGetter(String propertyName) {
-    return getMethods.keySet().contains(propertyName);
+    return getMethods.containsKey(propertyName);
   }
 
   /**

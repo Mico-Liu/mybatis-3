@@ -1,5 +1,5 @@
 /**
- *    Copyright 2009-2016 the original author or authors.
+ *    Copyright 2009-2020 the original author or authors.
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -23,8 +23,15 @@ import java.lang.annotation.Target;
 import org.apache.ibatis.mapping.FetchType;
 
 /**
+<<<<<<< HEAD
  * 复杂类型的单独属性值的注解
  *
+=======
+ * The annotation that specify the nested statement for retrieving single object.
+ *
+ * @see Result
+ * @see Results
+>>>>>>> mybatis-3-trunk/master
  * @author Clinton Begin
  */
 @Documented
@@ -32,12 +39,40 @@ import org.apache.ibatis.mapping.FetchType;
 @Target({})
 public @interface One {
   /**
+<<<<<<< HEAD
    * @return 已映射语句（也就是映射器方法）的全限定名
+=======
+   * Returns the columnPrefix.
+   *
+   * @return the columnPrefix.
+   * @since 3.5.5
+   */
+  String columnPrefix() default "";
+
+  /**
+   * Returns the result map id used to map single object.
+   *
+   * @return the result map id
+   * @since 3.5.5
+   */
+  String resultMap() default "";
+
+  /**
+   * Returns the statement id that retrieves single object.
+   *
+   * @return the statement id
+>>>>>>> mybatis-3-trunk/master
    */
   String select() default "";
 
   /**
+<<<<<<< HEAD
    * @return 加载类型
+=======
+   * Returns the fetch strategy for nested statement.
+   *
+   * @return the fetch strategy
+>>>>>>> mybatis-3-trunk/master
    */
   FetchType fetchType() default FetchType.DEFAULT;
 

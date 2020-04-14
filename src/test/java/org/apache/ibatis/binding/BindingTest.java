@@ -1,5 +1,5 @@
 /**
- *    Copyright 2009-2019 the original author or authors.
+ *    Copyright 2009-2020 the original author or authors.
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -36,6 +36,7 @@ import javax.sql.DataSource;
 import net.sf.cglib.proxy.Factory;
 
 import org.apache.ibatis.BaseDataTest;
+import org.apache.ibatis.binding.MapperProxy.MapperMethodInvoker;
 import org.apache.ibatis.cursor.Cursor;
 import org.apache.ibatis.domain.blog.Author;
 import org.apache.ibatis.domain.blog.Blog;
@@ -147,12 +148,20 @@ class BindingTest {
       try {
         BoundAuthorMapper mapper = session.getMapper(BoundAuthorMapper.class);
         Author author = new Author(-1, "cbegin", "******", "cbegin@nowhere.com", "N/A", Section.NEWS);
+<<<<<<< HEAD
         when(mapper).insertAuthorInvalidSelectKey(author);
         then(caughtException()).isInstanceOf(PersistenceException.class)
             .hasMessageContaining("### The error may exist in org/apache/ibatis/binding/BoundAuthorMapper.xml"
                 + System.lineSeparator()
                 + "### The error may involve org.apache.ibatis.binding.BoundAuthorMapper.insertAuthorInvalidSelectKey!selectKey"
                 + System.lineSeparator() + "### The error occurred while executing a query");
+=======
+        when(() -> mapper.insertAuthorInvalidSelectKey(author));
+        then(caughtException()).isInstanceOf(PersistenceException.class).hasMessageContaining(
+            "### The error may exist in org/apache/ibatis/binding/BoundAuthorMapper.xml" + System.lineSeparator() +
+                "### The error may involve org.apache.ibatis.binding.BoundAuthorMapper.insertAuthorInvalidSelectKey!selectKey" + System.lineSeparator() +
+                "### The error occurred while executing a query");
+>>>>>>> mybatis-3-trunk/master
       } finally {
         session.rollback();
       }
@@ -165,7 +174,7 @@ class BindingTest {
       try {
         BoundAuthorMapper mapper = session.getMapper(BoundAuthorMapper.class);
         Author author = new Author(-1, "cbegin", "******", "cbegin@nowhere.com", "N/A", Section.NEWS);
-        when(mapper).insertAuthorInvalidInsert(author);
+        when(() -> mapper.insertAuthorInvalidInsert(author));
         then(caughtException()).isInstanceOf(PersistenceException.class).hasMessageContaining(
             "### The error may exist in org/apache/ibatis/binding/BoundAuthorMapper.xml" + System.lineSeparator()
                 + "### The error may involve org.apache.ibatis.binding.BoundAuthorMapper.insertAuthorInvalidInsert"
@@ -594,7 +603,7 @@ class BindingTest {
       mapper.selectBlog(1);
       assertEquals(1, mapperProxyFactory.getMethodCache().size());
       assertTrue(mapperProxyFactory.getMethodCache().containsKey(selectBlog));
-      final MapperMethod cachedSelectBlog = mapperProxyFactory.getMethodCache().get(selectBlog);
+      final MapperMethodInvoker cachedSelectBlog = mapperProxyFactory.getMethodCache().get(selectBlog);
 
       // Call mapper method again and verify the cache is unchanged:
       session.clearCache();
@@ -693,4 +702,94 @@ class BindingTest {
     assertTrue(mapperClasses.contains(BoundAuthorMapper.class));
   }
 
+  @Test
+  void shouldMapPropertiesUsingRepeatableAnnotation() {
+    try (SqlSession session = sqlSessionFactory.openSession()) {
+      BoundAuthorMapper mapper = session.getMapper(BoundAuthorMapper.class);
+      Author author = new Author(-1, "cbegin", "******", "cbegin@nowhere.com", "N/A", Section.NEWS);
+      mapper.insertAuthor(author);
+      Author author2 = mapper.selectAuthorMapToPropertiesUsingRepeatable(author.getId());
+      assertNotNull(author2);
+      assertEquals(author.getId(), author2.getId());
+      assertEquals(author.getUsername(), author2.getUsername());
+      assertEquals(author.getPassword(), author2.getPassword());
+      assertEquals(author.getBio(), author2.getBio());
+      assertEquals(author.getEmail(), author2.getEmail());
+      session.rollback();
+    }
+  }
+
+  @Test
+  void shouldMapConstructorUsingRepeatableAnnotation() {
+    try (SqlSession session = sqlSessionFactory.openSession()) {
+      BoundAuthorMapper mapper = session.getMapper(BoundAuthorMapper.class);
+      Author author = new Author(-1, "cbegin", "******", "cbegin@nowhere.com", "N/A", Section.NEWS);
+      mapper.insertAuthor(author);
+      Author author2 = mapper.selectAuthorMapToConstructorUsingRepeatable(author.getId());
+      assertNotNull(author2);
+      assertEquals(author.getId(), author2.getId());
+      assertEquals(author.getUsername(), author2.getUsername());
+      assertEquals(author.getPassword(), author2.getPassword());
+      assertEquals(author.getBio(), author2.getBio());
+      assertEquals(author.getEmail(), author2.getEmail());
+      assertEquals(author.getFavouriteSection(), author2.getFavouriteSection());
+      session.rollback();
+    }
+  }
+
+  @Test
+  void shouldMapUsingSingleRepeatableAnnotation() {
+    try (SqlSession session = sqlSessionFactory.openSession()) {
+      BoundAuthorMapper mapper = session.getMapper(BoundAuthorMapper.class);
+      Author author = new Author(-1, "cbegin", "******", "cbegin@nowhere.com", "N/A", Section.NEWS);
+      mapper.insertAuthor(author);
+      Author author2 = mapper.selectAuthorUsingSingleRepeatable(author.getId());
+      assertNotNull(author2);
+      assertEquals(author.getId(), author2.getId());
+      assertEquals(author.getUsername(), author2.getUsername());
+      assertNull(author2.getPassword());
+      assertNull(author2.getBio());
+      assertNull(author2.getEmail());
+      assertNull(author2.getFavouriteSection());
+      session.rollback();
+    }
+  }
+
+  @Test
+  void shouldMapWhenSpecifyBothArgAndConstructorArgs() {
+    try (SqlSession session = sqlSessionFactory.openSession()) {
+      BoundAuthorMapper mapper = session.getMapper(BoundAuthorMapper.class);
+      Author author = new Author(-1, "cbegin", "******", "cbegin@nowhere.com", "N/A", Section.NEWS);
+      mapper.insertAuthor(author);
+      Author author2 = mapper.selectAuthorUsingBothArgAndConstructorArgs(author.getId());
+      assertNotNull(author2);
+      assertEquals(author.getId(), author2.getId());
+      assertEquals(author.getUsername(), author2.getUsername());
+      assertEquals(author.getPassword(), author2.getPassword());
+      assertEquals(author.getBio(), author2.getBio());
+      assertEquals(author.getEmail(), author2.getEmail());
+      assertEquals(author.getFavouriteSection(), author2.getFavouriteSection());
+      session.rollback();
+    }
+  }
+
+  @Test
+  void shouldMapWhenSpecifyBothResultAndResults() {
+    try (SqlSession session = sqlSessionFactory.openSession()) {
+      BoundAuthorMapper mapper = session.getMapper(BoundAuthorMapper.class);
+      Author author = new Author(-1, "cbegin", "******", "cbegin@nowhere.com", "N/A", Section.NEWS);
+      mapper.insertAuthor(author);
+      Author author2 = mapper.selectAuthorUsingBothResultAndResults(author.getId());
+      assertNotNull(author2);
+      assertEquals(author.getId(), author2.getId());
+      assertEquals(author.getUsername(), author2.getUsername());
+      assertNull(author2.getPassword());
+      assertNull(author2.getBio());
+      assertNull(author2.getEmail());
+      assertNull(author2.getFavouriteSection());
+      session.rollback();
+    }
+  }
+
 }
+

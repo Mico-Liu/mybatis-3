@@ -1,4 +1,5 @@
 /**
+<<<<<<< HEAD
  * Copyright 2009-2019 the original author or authors.
  * <p>
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,6 +17,58 @@
 package org.apache.ibatis.builder.annotation;
 
 import org.apache.ibatis.annotations.*;
+=======
+ *    Copyright 2009-2020 the original author or authors.
+ *
+ *    Licensed under the Apache License, Version 2.0 (the "License");
+ *    you may not use this file except in compliance with the License.
+ *    You may obtain a copy of the License at
+ *
+ *       http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *    Unless required by applicable law or agreed to in writing, software
+ *    distributed under the License is distributed on an "AS IS" BASIS,
+ *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *    See the License for the specific language governing permissions and
+ *    limitations under the License.
+ */
+package org.apache.ibatis.builder.annotation;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Array;
+import java.lang.reflect.GenericArrayType;
+import java.lang.reflect.Method;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Properties;
+import java.util.Set;
+
+import org.apache.ibatis.annotations.Arg;
+import org.apache.ibatis.annotations.CacheNamespace;
+import org.apache.ibatis.annotations.CacheNamespaceRef;
+import org.apache.ibatis.annotations.Case;
+import org.apache.ibatis.annotations.Delete;
+import org.apache.ibatis.annotations.DeleteProvider;
+import org.apache.ibatis.annotations.Insert;
+import org.apache.ibatis.annotations.InsertProvider;
+import org.apache.ibatis.annotations.Lang;
+import org.apache.ibatis.annotations.MapKey;
+import org.apache.ibatis.annotations.Options;
+import org.apache.ibatis.annotations.Options.FlushCachePolicy;
+import org.apache.ibatis.annotations.Property;
+import org.apache.ibatis.annotations.Result;
+>>>>>>> mybatis-3-trunk/master
 import org.apache.ibatis.annotations.ResultMap;
 import org.apache.ibatis.annotations.Options.FlushCachePolicy;
 import org.apache.ibatis.binding.BindingException;
@@ -54,6 +107,7 @@ import java.util.*;
  */
 public class MapperAnnotationBuilder {
 
+<<<<<<< HEAD
     /**
      * SQL 操作注解集合
      */
@@ -118,11 +172,59 @@ public class MapperAnnotationBuilder {
                     configuration.addIncompleteMethod(new MethodResolver(this, method));
                 }
             }
+=======
+  private static final Set<Class<? extends Annotation>> SQL_ANNOTATION_TYPES = new HashSet<>();
+  private static final Set<Class<? extends Annotation>> SQL_PROVIDER_ANNOTATION_TYPES = new HashSet<>();
+
+  private final Configuration configuration;
+  private final MapperBuilderAssistant assistant;
+  private final Class<?> type;
+
+  static {
+    SQL_ANNOTATION_TYPES.add(Select.class);
+    SQL_ANNOTATION_TYPES.add(Insert.class);
+    SQL_ANNOTATION_TYPES.add(Update.class);
+    SQL_ANNOTATION_TYPES.add(Delete.class);
+
+    SQL_PROVIDER_ANNOTATION_TYPES.add(SelectProvider.class);
+    SQL_PROVIDER_ANNOTATION_TYPES.add(InsertProvider.class);
+    SQL_PROVIDER_ANNOTATION_TYPES.add(UpdateProvider.class);
+    SQL_PROVIDER_ANNOTATION_TYPES.add(DeleteProvider.class);
+  }
+
+  public MapperAnnotationBuilder(Configuration configuration, Class<?> type) {
+    String resource = type.getName().replace('.', '/') + ".java (best guess)";
+    this.assistant = new MapperBuilderAssistant(configuration, resource);
+    this.configuration = configuration;
+    this.type = type;
+  }
+
+  public void parse() {
+    String resource = type.toString();
+    if (!configuration.isResourceLoaded(resource)) {
+      loadXmlResource();
+      configuration.addLoadedResource(resource);
+      assistant.setCurrentNamespace(type.getName());
+      parseCache();
+      parseCacheRef();
+      for (Method method : type.getMethods()) {
+        if (!canHaveStatement(method)) {
+          continue;
+        }
+        if (getSqlCommandType(method) == SqlCommandType.SELECT && method.getAnnotation(ResultMap.class) == null) {
+          parseResultMap(method);
+        }
+        try {
+          parseStatement(method);
+        } catch (IncompleteElementException e) {
+          configuration.addIncompleteMethod(new MethodResolver(this, method));
+>>>>>>> mybatis-3-trunk/master
         }
         // <8> 解析待定的方法
         parsePendingMethods();
     }
 
+<<<<<<< HEAD
     /**
      *
      */
@@ -140,6 +242,23 @@ public class MapperAnnotationBuilder {
                     // This method is still missing a resource
                 }
             }
+=======
+  private boolean canHaveStatement(Method method) {
+    // issue #237
+    return !method.isBridge() && !method.isDefault();
+  }
+
+  private void parsePendingMethods() {
+    Collection<MethodResolver> incompleteMethods = configuration.getIncompleteMethods();
+    synchronized (incompleteMethods) {
+      Iterator<MethodResolver> iter = incompleteMethods.iterator();
+      while (iter.hasNext()) {
+        try {
+          iter.next().resolve();
+          iter.remove();
+        } catch (IncompleteElementException e) {
+          // This method is still missing a resource
+>>>>>>> mybatis-3-trunk/master
         }
     }
 
@@ -236,6 +355,7 @@ public class MapperAnnotationBuilder {
                 configuration.addIncompleteCacheRef(new CacheRefResolver(assistant, namespace));
             }
         }
+<<<<<<< HEAD
     }
 
     /**
@@ -325,6 +445,98 @@ public class MapperAnnotationBuilder {
     private void applyResultMap(String resultMapId, Class<?> returnType, Arg[] args, Result[] results,
                                 TypeDiscriminator discriminator) {
         // <1> 创建 ResultMapping 数组
+=======
+      }
+      if (inputStream != null) {
+        XMLMapperBuilder xmlParser = new XMLMapperBuilder(inputStream, assistant.getConfiguration(), xmlResource, configuration.getSqlFragments(), type.getName());
+        xmlParser.parse();
+      }
+    }
+  }
+
+  private void parseCache() {
+    CacheNamespace cacheDomain = type.getAnnotation(CacheNamespace.class);
+    if (cacheDomain != null) {
+      Integer size = cacheDomain.size() == 0 ? null : cacheDomain.size();
+      Long flushInterval = cacheDomain.flushInterval() == 0 ? null : cacheDomain.flushInterval();
+      Properties props = convertToProperties(cacheDomain.properties());
+      assistant.useNewCache(cacheDomain.implementation(), cacheDomain.eviction(), flushInterval, size, cacheDomain.readWrite(), cacheDomain.blocking(), props);
+    }
+  }
+
+  private Properties convertToProperties(Property[] properties) {
+    if (properties.length == 0) {
+      return null;
+    }
+    Properties props = new Properties();
+    for (Property property : properties) {
+      props.setProperty(property.name(),
+          PropertyParser.parse(property.value(), configuration.getVariables()));
+    }
+    return props;
+  }
+
+  private void parseCacheRef() {
+    CacheNamespaceRef cacheDomainRef = type.getAnnotation(CacheNamespaceRef.class);
+    if (cacheDomainRef != null) {
+      Class<?> refType = cacheDomainRef.value();
+      String refName = cacheDomainRef.name();
+      if (refType == void.class && refName.isEmpty()) {
+        throw new BuilderException("Should be specified either value() or name() attribute in the @CacheNamespaceRef");
+      }
+      if (refType != void.class && !refName.isEmpty()) {
+        throw new BuilderException("Cannot use both value() and name() attribute in the @CacheNamespaceRef");
+      }
+      String namespace = (refType != void.class) ? refType.getName() : refName;
+      try {
+        assistant.useCacheRef(namespace);
+      } catch (IncompleteElementException e) {
+        configuration.addIncompleteCacheRef(new CacheRefResolver(assistant, namespace));
+      }
+    }
+  }
+
+  private String parseResultMap(Method method) {
+    Class<?> returnType = getReturnType(method);
+    Arg[] args = method.getAnnotationsByType(Arg.class);
+    Result[] results = method.getAnnotationsByType(Result.class);
+    TypeDiscriminator typeDiscriminator = method.getAnnotation(TypeDiscriminator.class);
+    String resultMapId = generateResultMapName(method);
+    applyResultMap(resultMapId, returnType, args, results, typeDiscriminator);
+    return resultMapId;
+  }
+
+  private String generateResultMapName(Method method) {
+    Results results = method.getAnnotation(Results.class);
+    if (results != null && !results.id().isEmpty()) {
+      return type.getName() + "." + results.id();
+    }
+    StringBuilder suffix = new StringBuilder();
+    for (Class<?> c : method.getParameterTypes()) {
+      suffix.append("-");
+      suffix.append(c.getSimpleName());
+    }
+    if (suffix.length() < 1) {
+      suffix.append("-void");
+    }
+    return type.getName() + "." + method.getName() + suffix;
+  }
+
+  private void applyResultMap(String resultMapId, Class<?> returnType, Arg[] args, Result[] results, TypeDiscriminator discriminator) {
+    List<ResultMapping> resultMappings = new ArrayList<>();
+    applyConstructorArgs(args, returnType, resultMappings);
+    applyResults(results, returnType, resultMappings);
+    Discriminator disc = applyDiscriminator(resultMapId, returnType, discriminator);
+    // TODO add AutoMappingBehaviour
+    assistant.addResultMap(resultMapId, returnType, null, disc, resultMappings, null);
+    createDiscriminatorResultMaps(resultMapId, returnType, discriminator);
+  }
+
+  private void createDiscriminatorResultMaps(String resultMapId, Class<?> resultType, TypeDiscriminator discriminator) {
+    if (discriminator != null) {
+      for (Case c : discriminator.cases()) {
+        String caseResultMapId = resultMapId + "-" + c.value();
+>>>>>>> mybatis-3-trunk/master
         List<ResultMapping> resultMappings = new ArrayList<>();
         // <2> 将 @Arg[] 注解数组，解析成对应的 ResultMapping 对象们，并添加到 resultMappings 中。
         applyConstructorArgs(args, returnType, resultMappings);
@@ -528,6 +740,7 @@ public class MapperAnnotationBuilder {
                     // ResultSets
                     options != null ? nullOrEmpty(options.resultSets()) : null);
         }
+<<<<<<< HEAD
     }
 
     /**
@@ -542,6 +755,67 @@ public class MapperAnnotationBuilder {
         Class<? extends LanguageDriver> langClass = null;
         if (lang != null) {
             langClass = lang.value();
+=======
+      }
+
+      String resultMapId = null;
+      if (isSelect) {
+        ResultMap resultMapAnnotation = method.getAnnotation(ResultMap.class);
+        if (resultMapAnnotation != null) {
+          resultMapId = String.join(",", resultMapAnnotation.value());
+        } else {
+          resultMapId = generateResultMapName(method);
+        }
+      }
+
+      assistant.addMappedStatement(
+          mappedStatementId,
+          sqlSource,
+          statementType,
+          sqlCommandType,
+          fetchSize,
+          timeout,
+          // ParameterMapID
+          null,
+          parameterTypeClass,
+          resultMapId,
+          getReturnType(method),
+          resultSetType,
+          flushCache,
+          useCache,
+          // TODO gcode issue #577
+          false,
+          keyGenerator,
+          keyProperty,
+          keyColumn,
+          // DatabaseID
+          null,
+          languageDriver,
+          // ResultSets
+          options != null ? nullOrEmpty(options.resultSets()) : null);
+    }
+  }
+
+  private LanguageDriver getLanguageDriver(Method method) {
+    Lang lang = method.getAnnotation(Lang.class);
+    Class<? extends LanguageDriver> langClass = null;
+    if (lang != null) {
+      langClass = lang.value();
+    }
+    return configuration.getLanguageDriver(langClass);
+  }
+
+  private Class<?> getParameterType(Method method) {
+    Class<?> parameterType = null;
+    Class<?>[] parameterTypes = method.getParameterTypes();
+    for (Class<?> currentParameterType : parameterTypes) {
+      if (!RowBounds.class.isAssignableFrom(currentParameterType) && !ResultHandler.class.isAssignableFrom(currentParameterType)) {
+        if (parameterType == null) {
+          parameterType = currentParameterType;
+        } else {
+          // issue #135
+          parameterType = ParamMap.class;
+>>>>>>> mybatis-3-trunk/master
         }
         // 获得 LanguageDriver 对象
         // 如果 langClass 为空，即无 @Lang 注解，则会使用默认 LanguageDriver 类型
@@ -862,6 +1136,7 @@ public class MapperAnnotationBuilder {
             // 添加到 resultMappings 中
             resultMappings.add(resultMapping);
         }
+<<<<<<< HEAD
     }
 
     /**
@@ -1035,5 +1310,214 @@ public class MapperAnnotationBuilder {
         configuration.addKeyGenerator(id, answer);
         return answer;
     }
+=======
+        Annotation sqlAnnotation = method.getAnnotation(sqlAnnotationType);
+        final String[] strings = (String[]) sqlAnnotation.getClass().getMethod("value").invoke(sqlAnnotation);
+        return buildSqlSourceFromStrings(strings, parameterType, languageDriver);
+      } else if (sqlProviderAnnotationType != null) {
+        Annotation sqlProviderAnnotation = method.getAnnotation(sqlProviderAnnotationType);
+        return new ProviderSqlSource(assistant.getConfiguration(), sqlProviderAnnotation, type, method);
+      }
+      return null;
+    } catch (Exception e) {
+      throw new BuilderException("Could not find value method on SQL annotation.  Cause: " + e, e);
+    }
+  }
+
+  private SqlSource buildSqlSourceFromStrings(String[] strings, Class<?> parameterTypeClass, LanguageDriver languageDriver) {
+    return languageDriver.createSqlSource(configuration, String.join(" ", strings).trim(), parameterTypeClass);
+  }
+
+  private SqlCommandType getSqlCommandType(Method method) {
+    Class<? extends Annotation> type = getSqlAnnotationType(method);
+
+    if (type == null) {
+      type = getSqlProviderAnnotationType(method);
+
+      if (type == null) {
+        return SqlCommandType.UNKNOWN;
+      }
+
+      if (type == SelectProvider.class) {
+        type = Select.class;
+      } else if (type == InsertProvider.class) {
+        type = Insert.class;
+      } else if (type == UpdateProvider.class) {
+        type = Update.class;
+      } else if (type == DeleteProvider.class) {
+        type = Delete.class;
+      }
+    }
+
+    return SqlCommandType.valueOf(type.getSimpleName().toUpperCase(Locale.ENGLISH));
+  }
+
+  private Class<? extends Annotation> getSqlAnnotationType(Method method) {
+    return chooseAnnotationType(method, SQL_ANNOTATION_TYPES);
+  }
+
+  private Class<? extends Annotation> getSqlProviderAnnotationType(Method method) {
+    return chooseAnnotationType(method, SQL_PROVIDER_ANNOTATION_TYPES);
+  }
+
+  private Class<? extends Annotation> chooseAnnotationType(Method method, Set<Class<? extends Annotation>> types) {
+    for (Class<? extends Annotation> type : types) {
+      Annotation annotation = method.getAnnotation(type);
+      if (annotation != null) {
+        return type;
+      }
+    }
+    return null;
+  }
+
+  private void applyResults(Result[] results, Class<?> resultType, List<ResultMapping> resultMappings) {
+    for (Result result : results) {
+      List<ResultFlag> flags = new ArrayList<>();
+      if (result.id()) {
+        flags.add(ResultFlag.ID);
+      }
+      @SuppressWarnings("unchecked")
+      Class<? extends TypeHandler<?>> typeHandler = (Class<? extends TypeHandler<?>>)
+              ((result.typeHandler() == UnknownTypeHandler.class) ? null : result.typeHandler());
+      boolean hasNestedResultMap = hasNestedResultMap(result);
+      ResultMapping resultMapping = assistant.buildResultMapping(
+          resultType,
+          nullOrEmpty(result.property()),
+          nullOrEmpty(result.column()),
+          result.javaType() == void.class ? null : result.javaType(),
+          result.jdbcType() == JdbcType.UNDEFINED ? null : result.jdbcType(),
+          hasNestedSelect(result) ? nestedSelectId(result) : null,
+          hasNestedResultMap ? nestedResultMapId(result) : null,
+          null,
+          hasNestedResultMap ? findColumnPrefix(result) : null,
+          typeHandler,
+          flags,
+          null,
+          null,
+          isLazy(result));
+      resultMappings.add(resultMapping);
+    }
+  }
+
+  private String findColumnPrefix(Result result) {
+    String columnPrefix = result.one().columnPrefix();
+    if (columnPrefix.length() < 1) {
+      columnPrefix = result.many().columnPrefix();
+    }
+    return columnPrefix;
+  }
+
+  private String nestedResultMapId(Result result) {
+    String resultMapId = result.one().resultMap();
+    if (resultMapId.length() < 1) {
+      resultMapId = result.many().resultMap();
+    }
+    if (!resultMapId.contains(".")) {
+      resultMapId = type.getName() + "." + resultMapId;
+    }
+    return resultMapId;
+  }
+
+  private boolean hasNestedResultMap(Result result) {
+    if (result.one().resultMap().length() > 0 && result.many().resultMap().length() > 0) {
+      throw new BuilderException("Cannot use both @One and @Many annotations in the same @Result");
+    }
+    return result.one().resultMap().length() > 0 || result.many().resultMap().length() > 0;
+  }
+
+  private String nestedSelectId(Result result) {
+    String nestedSelect = result.one().select();
+    if (nestedSelect.length() < 1) {
+      nestedSelect = result.many().select();
+    }
+    if (!nestedSelect.contains(".")) {
+      nestedSelect = type.getName() + "." + nestedSelect;
+    }
+    return nestedSelect;
+  }
+
+  private boolean isLazy(Result result) {
+    boolean isLazy = configuration.isLazyLoadingEnabled();
+    if (result.one().select().length() > 0 && FetchType.DEFAULT != result.one().fetchType()) {
+      isLazy = result.one().fetchType() == FetchType.LAZY;
+    } else if (result.many().select().length() > 0 && FetchType.DEFAULT != result.many().fetchType()) {
+      isLazy = result.many().fetchType() == FetchType.LAZY;
+    }
+    return isLazy;
+  }
+
+  private boolean hasNestedSelect(Result result) {
+    if (result.one().select().length() > 0 && result.many().select().length() > 0) {
+      throw new BuilderException("Cannot use both @One and @Many annotations in the same @Result");
+    }
+    return result.one().select().length() > 0 || result.many().select().length() > 0;
+  }
+
+  private void applyConstructorArgs(Arg[] args, Class<?> resultType, List<ResultMapping> resultMappings) {
+    for (Arg arg : args) {
+      List<ResultFlag> flags = new ArrayList<>();
+      flags.add(ResultFlag.CONSTRUCTOR);
+      if (arg.id()) {
+        flags.add(ResultFlag.ID);
+      }
+      @SuppressWarnings("unchecked")
+      Class<? extends TypeHandler<?>> typeHandler = (Class<? extends TypeHandler<?>>)
+              (arg.typeHandler() == UnknownTypeHandler.class ? null : arg.typeHandler());
+      ResultMapping resultMapping = assistant.buildResultMapping(
+          resultType,
+          nullOrEmpty(arg.name()),
+          nullOrEmpty(arg.column()),
+          arg.javaType() == void.class ? null : arg.javaType(),
+          arg.jdbcType() == JdbcType.UNDEFINED ? null : arg.jdbcType(),
+          nullOrEmpty(arg.select()),
+          nullOrEmpty(arg.resultMap()),
+          null,
+          nullOrEmpty(arg.columnPrefix()),
+          typeHandler,
+          flags,
+          null,
+          null,
+          false);
+      resultMappings.add(resultMapping);
+    }
+  }
+
+  private String nullOrEmpty(String value) {
+    return value == null || value.trim().length() == 0 ? null : value;
+  }
+
+  private KeyGenerator handleSelectKeyAnnotation(SelectKey selectKeyAnnotation, String baseStatementId, Class<?> parameterTypeClass, LanguageDriver languageDriver) {
+    String id = baseStatementId + SelectKeyGenerator.SELECT_KEY_SUFFIX;
+    Class<?> resultTypeClass = selectKeyAnnotation.resultType();
+    StatementType statementType = selectKeyAnnotation.statementType();
+    String keyProperty = selectKeyAnnotation.keyProperty();
+    String keyColumn = selectKeyAnnotation.keyColumn();
+    boolean executeBefore = selectKeyAnnotation.before();
+
+    // defaults
+    boolean useCache = false;
+    KeyGenerator keyGenerator = NoKeyGenerator.INSTANCE;
+    Integer fetchSize = null;
+    Integer timeout = null;
+    boolean flushCache = false;
+    String parameterMap = null;
+    String resultMap = null;
+    ResultSetType resultSetTypeEnum = null;
+
+    SqlSource sqlSource = buildSqlSourceFromStrings(selectKeyAnnotation.statement(), parameterTypeClass, languageDriver);
+    SqlCommandType sqlCommandType = SqlCommandType.SELECT;
+
+    assistant.addMappedStatement(id, sqlSource, statementType, sqlCommandType, fetchSize, timeout, parameterMap, parameterTypeClass, resultMap, resultTypeClass, resultSetTypeEnum,
+        flushCache, useCache, false,
+        keyGenerator, keyProperty, keyColumn, null, languageDriver, null);
+
+    id = assistant.applyCurrentNamespace(id, false);
+
+    MappedStatement keyStatement = configuration.getMappedStatement(id, false);
+    SelectKeyGenerator answer = new SelectKeyGenerator(keyStatement, executeBefore);
+    configuration.addKeyGenerator(id, answer);
+    return answer;
+  }
+>>>>>>> mybatis-3-trunk/master
 
 }

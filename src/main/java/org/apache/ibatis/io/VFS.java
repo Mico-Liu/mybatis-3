@@ -1,4 +1,5 @@
 /**
+<<<<<<< HEAD
  * Copyright 2009-2019 the original author or authors.
  * <p>
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,6 +13,21 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
+=======
+ *    Copyright 2009-2020 the original author or authors.
+ *
+ *    Licensed under the Apache License, Version 2.0 (the "License");
+ *    you may not use this file except in compliance with the License.
+ *    You may obtain a copy of the License at
+ *
+ *       http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *    Unless required by applicable law or agreed to in writing, software
+ *    distributed under the License is distributed on an "AS IS" BASIS,
+ *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *    See the License for the specific language governing permissions and
+ *    limitations under the License.
+>>>>>>> mybatis-3-trunk/master
  */
 package org.apache.ibatis.io;
 
@@ -46,9 +62,12 @@ public abstract class VFS {
   public static final Class<?>[] IMPLEMENTATIONS = {JBoss6VFS.class, DefaultVFS.class};
 
   /**
+<<<<<<< HEAD
    * 自定义的 VFS 实现类的数组
    * <p>
    * 可通过 {@link #addImplClass(Class<? extends VFS> clazz)} 方法，进行添加。
+=======
+>>>>>>> mybatis-3-trunk/master
    * The list to which implementations are added by {@link #addImplClass(Class)}.
    */
   public static final List<Class<? extends VFS>> USER_IMPLEMENTATIONS = new ArrayList<>();
@@ -74,10 +93,16 @@ public abstract class VFS {
         Class<? extends VFS> impl = impls.get(i);
         try {
           vfs = impl.getDeclaredConstructor().newInstance();
+<<<<<<< HEAD
           if (vfs == null || !vfs.isValid()) {
             if (log.isDebugEnabled()) {
               log.debug("VFS implementation " + impl.getName() + " is not valid in this environment.");
             }
+=======
+          if (!vfs.isValid() && log.isDebugEnabled()) {
+            log.debug("VFS implementation " + impl.getName()
+                + " is not valid in this environment.");
+>>>>>>> mybatis-3-trunk/master
           }
         } catch (InstantiationException | IllegalAccessException | NoSuchMethodException
           | InvocationTargetException e) {
@@ -95,10 +120,17 @@ public abstract class VFS {
   }
 
   /**
+<<<<<<< HEAD
    * 获得 VFS 单例
    * <p>
    * Get the singleton {@link VFS} instance. If no {@link VFS} implementation can be found for the current environment,
    * then this method returns null.
+=======
+   * Get the singleton {@link VFS} instance. If no {@link VFS} implementation can be found for the current environment,
+   * then this method returns null.
+   *
+   * @return single instance of VFS
+>>>>>>> mybatis-3-trunk/master
    */
   public static VFS getInstance() {
     return VFSHolder.INSTANCE;
@@ -118,6 +150,13 @@ public abstract class VFS {
 
   /**
    * Get a class by name. If the class is not found then return null.
+<<<<<<< HEAD
+=======
+   *
+   * @param className
+   *          the class name
+   * @return the class
+>>>>>>> mybatis-3-trunk/master
    */
   protected static Class<?> getClass(String className) {
     try {
@@ -134,9 +173,19 @@ public abstract class VFS {
   /**
    * Get a method by name and parameter types. If the method is not found then return null.
    *
+<<<<<<< HEAD
    * @param clazz          The class to which the method belongs.
    * @param methodName     The name of the method.
    * @param parameterTypes The types of the parameters accepted by the method.
+=======
+   * @param clazz
+   *          The class to which the method belongs.
+   * @param methodName
+   *          The name of the method.
+   * @param parameterTypes
+   *          The types of the parameters accepted by the method.
+   * @return the method
+>>>>>>> mybatis-3-trunk/master
    */
   protected static Method getMethod(Class<?> clazz, String methodName, Class<?>... parameterTypes) {
     if (clazz == null) {
@@ -156,12 +205,28 @@ public abstract class VFS {
   /**
    * Invoke a method on an object and return whatever it returns.
    *
+<<<<<<< HEAD
    * @param method     The method to invoke.
    * @param object     The instance or class (for static methods) on which to invoke the method.
    * @param parameters The parameters to pass to the method.
    * @return Whatever the method returns.
    * @throws IOException      If I/O errors occur
    * @throws RuntimeException If anything else goes wrong
+=======
+   * @param <T>
+   *          the generic type
+   * @param method
+   *          The method to invoke.
+   * @param object
+   *          The instance or class (for static methods) on which to invoke the method.
+   * @param parameters
+   *          The parameters to pass to the method.
+   * @return Whatever the method returns.
+   * @throws IOException
+   *           If I/O errors occur
+   * @throws RuntimeException
+   *           If anything else goes wrong
+>>>>>>> mybatis-3-trunk/master
    */
   @SuppressWarnings("unchecked")
   protected static <T> T invoke(Method method, Object object, Object... parameters)
@@ -191,9 +256,15 @@ public abstract class VFS {
   }
 
   /**
+<<<<<<< HEAD
    * 抽象方法，判断是否为合法的 VFS
    *
    * Return true if the {@link VFS} implementation is valid for the current environment.
+=======
+   * Return true if the {@link VFS} implementation is valid for the current environment.
+   *
+   * @return true, if is valid
+>>>>>>> mybatis-3-trunk/master
    */
   public abstract boolean isValid();
 

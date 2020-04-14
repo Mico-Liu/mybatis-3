@@ -1,5 +1,5 @@
 /**
- *    Copyright 2009-2019 the original author or authors.
+ *    Copyright 2009-2020 the original author or authors.
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -18,6 +18,7 @@ package org.apache.ibatis.jdbc;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -47,6 +48,11 @@ public abstract class AbstractSQL<T> {
   }
 
   /**
+   * Sets the.
+   *
+   * @param sets
+   *          the sets
+   * @return the t
    * @since 3.4.2
    */
   public T SET(String... sets) {
@@ -67,6 +73,11 @@ public abstract class AbstractSQL<T> {
   }
 
   /**
+   * Into columns.
+   *
+   * @param columns
+   *          the columns
+   * @return the t
    * @since 3.4.2
    */
   public T INTO_COLUMNS(String... columns) {
@@ -75,13 +86,16 @@ public abstract class AbstractSQL<T> {
   }
 
   /**
+   * Into values.
+   *
+   * @param values
+   *          the values
+   * @return the t
    * @since 3.4.2
    */
   public T INTO_VALUES(String... values) {
     List<String> list = sql().valuesList.get(sql().valuesList.size() - 1);
-    for (String value : values) {
-      list.add(value);
-    }
+    Collections.addAll(list, values);
     return getSelf();
   }
 
@@ -92,6 +106,11 @@ public abstract class AbstractSQL<T> {
   }
 
   /**
+   * Select.
+   *
+   * @param columns
+   *          the columns
+   * @return the t
    * @since 3.4.2
    */
   public T SELECT(String... columns) {
@@ -107,6 +126,11 @@ public abstract class AbstractSQL<T> {
   }
 
   /**
+   * Select distinct.
+   *
+   * @param columns
+   *          the columns
+   * @return the t
    * @since 3.4.2
    */
   public T SELECT_DISTINCT(String... columns) {
@@ -127,6 +151,11 @@ public abstract class AbstractSQL<T> {
   }
 
   /**
+   * From.
+   *
+   * @param tables
+   *          the tables
+   * @return the t
    * @since 3.4.2
    */
   public T FROM(String... tables) {
@@ -140,6 +169,11 @@ public abstract class AbstractSQL<T> {
   }
 
   /**
+   * Join.
+   *
+   * @param joins
+   *          the joins
+   * @return the t
    * @since 3.4.2
    */
   public T JOIN(String... joins) {
@@ -153,6 +187,11 @@ public abstract class AbstractSQL<T> {
   }
 
   /**
+   * Inner join.
+   *
+   * @param joins
+   *          the joins
+   * @return the t
    * @since 3.4.2
    */
   public T INNER_JOIN(String... joins) {
@@ -166,6 +205,11 @@ public abstract class AbstractSQL<T> {
   }
 
   /**
+   * Left outer join.
+   *
+   * @param joins
+   *          the joins
+   * @return the t
    * @since 3.4.2
    */
   public T LEFT_OUTER_JOIN(String... joins) {
@@ -179,6 +223,11 @@ public abstract class AbstractSQL<T> {
   }
 
   /**
+   * Right outer join.
+   *
+   * @param joins
+   *          the joins
+   * @return the t
    * @since 3.4.2
    */
   public T RIGHT_OUTER_JOIN(String... joins) {
@@ -192,6 +241,11 @@ public abstract class AbstractSQL<T> {
   }
 
   /**
+   * Outer join.
+   *
+   * @param joins
+   *          the joins
+   * @return the t
    * @since 3.4.2
    */
   public T OUTER_JOIN(String... joins) {
@@ -206,6 +260,11 @@ public abstract class AbstractSQL<T> {
   }
 
   /**
+   * Where.
+   *
+   * @param conditions
+   *          the conditions
+   * @return the t
    * @since 3.4.2
    */
   public T WHERE(String... conditions) {
@@ -230,6 +289,11 @@ public abstract class AbstractSQL<T> {
   }
 
   /**
+   * Group by.
+   *
+   * @param columns
+   *          the columns
+   * @return the t
    * @since 3.4.2
    */
   public T GROUP_BY(String... columns) {
@@ -244,6 +308,11 @@ public abstract class AbstractSQL<T> {
   }
 
   /**
+   * Having.
+   *
+   * @param conditions
+   *          the conditions
+   * @return the t
    * @since 3.4.2
    */
   public T HAVING(String... conditions) {
@@ -258,6 +327,11 @@ public abstract class AbstractSQL<T> {
   }
 
   /**
+   * Order by.
+   *
+   * @param columns
+   *          the columns
+   * @return the t
    * @since 3.4.2
    */
   public T ORDER_BY(String... columns) {
@@ -377,8 +451,13 @@ public abstract class AbstractSQL<T> {
     return OFFSET_ROWS(String.valueOf(value));
   }
 
-  /*
+  /**
    * used to add a new inserted row while do multi-row insert.
+<<<<<<< HEAD
+=======
+   *
+   * @return the t
+>>>>>>> mybatis-3-trunk/master
    * @since 3.5.2
    */
   public T ADD_ROW() {
@@ -403,12 +482,12 @@ public abstract class AbstractSQL<T> {
   }
 
   private static class SafeAppendable {
-    private final Appendable a;
+    private final Appendable appendable;
     private boolean empty = true;
 
     public SafeAppendable(Appendable a) {
       super();
-      this.a = a;
+      this.appendable = a;
     }
 
     public SafeAppendable append(CharSequence s) {
@@ -416,7 +495,7 @@ public abstract class AbstractSQL<T> {
         if (empty && s.length() > 0) {
           empty = false;
         }
-        a.append(s);
+        appendable.append(s);
       } catch (IOException e) {
         throw new RuntimeException(e);
       }

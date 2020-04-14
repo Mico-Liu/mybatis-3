@@ -50,6 +50,7 @@ class MultipleDiscriminatorTest {
       Assertions.assertNotNull(person, "Person must not be null");
       Assertions.assertEquals(Director.class, person.getClass(), "Person must be a director");
     }
+<<<<<<< HEAD
   }
 
   @Test
@@ -59,6 +60,16 @@ class MultipleDiscriminatorTest {
       Person person = personMapper.get2(1L);
       Assertions.assertNotNull(person, "Person must not be null");
       Assertions.assertEquals(Director.class, person.getClass(), "Person must be a director");
+=======
+    @Test
+    void testMultipleDiscriminatorLoop() {
+        Assertions.assertTimeout(Duration.ofMillis(20000), () -> {
+          try (SqlSession sqlSession = sqlSessionFactory.openSession()) {
+            PersonMapper personMapper = sqlSession.getMapper(PersonMapper.class);
+            personMapper.getLoop();
+          }
+        });
+>>>>>>> mybatis-3-trunk/master
     }
   }
 

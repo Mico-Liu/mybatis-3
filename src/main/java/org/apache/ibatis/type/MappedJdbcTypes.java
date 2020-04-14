@@ -1,5 +1,9 @@
 /**
+<<<<<<< HEAD
  *    Copyright 2009-2019 the original author or authors.
+=======
+ *    Copyright 2009-2020 the original author or authors.
+>>>>>>> mybatis-3-trunk/master
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -22,8 +26,21 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
+<<<<<<< HEAD
  * 匹配的 JDBC Type 类型的注解
  *
+=======
+ * The annotation that specify jdbc types to map {@link TypeHandler}.
+ *
+ * <p>
+ * <b>How to use:</b>
+ * <pre>
+ * &#064;MappedJdbcTypes({JdbcType.CHAR, JdbcType.VARCHAR})
+ * public class StringTrimmingTypeHandler implements TypeHandler&lt;String&gt; {
+ *   // ...
+ * }
+ * </pre>
+>>>>>>> mybatis-3-trunk/master
  * @author Eduardo Macarron
  */
 @Documented
@@ -31,12 +48,24 @@ import java.lang.annotation.Target;
 @Target(ElementType.TYPE)// 注册到类
 public @interface MappedJdbcTypes {
   /**
+<<<<<<< HEAD
    * @return 匹配的 JDBC Type 类型的注解
+=======
+   * Returns jdbc types to map {@link TypeHandler}.
+   *
+   * @return jdbc types
+>>>>>>> mybatis-3-trunk/master
    */
   JdbcType[] value();
 
   /**
+<<<<<<< HEAD
    * @return 是否包含 {@link java.sql.JDBCType#NULL}
+=======
+   * Returns whether map to jdbc null type.
+   *
+   * @return {@code true} if map, {@code false} if otherwise
+>>>>>>> mybatis-3-trunk/master
    */
   boolean includeNullJdbcType() default false;
 }

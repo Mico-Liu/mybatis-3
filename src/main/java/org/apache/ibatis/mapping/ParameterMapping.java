@@ -1,5 +1,5 @@
 /**
- *    Copyright 2009-2019 the original author or authors.
+ *    Copyright 2009-2020 the original author or authors.
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -138,8 +138,13 @@ public class ParameterMapping {
 
   /**
    * Used for handling output of callable statements.
+<<<<<<< HEAD
    * 
    * @return
+=======
+   *
+   * @return the mode
+>>>>>>> mybatis-3-trunk/master
    */
   public ParameterMode getMode() {
     return mode;
@@ -147,8 +152,13 @@ public class ParameterMapping {
 
   /**
    * Used for handling output of callable statements.
+<<<<<<< HEAD
    * 
    * @return
+=======
+   *
+   * @return the java type
+>>>>>>> mybatis-3-trunk/master
    */
   public Class<?> getJavaType() {
     return javaType;
@@ -156,8 +166,13 @@ public class ParameterMapping {
 
   /**
    * Used in the UnknownTypeHandler in case there is no handler for the property type.
+<<<<<<< HEAD
    * 
    * @return
+=======
+   *
+   * @return the jdbc type
+>>>>>>> mybatis-3-trunk/master
    */
   public JdbcType getJdbcType() {
     return jdbcType;
@@ -165,8 +180,13 @@ public class ParameterMapping {
 
   /**
    * Used for handling output of callable statements.
+<<<<<<< HEAD
    * 
    * @return
+=======
+   *
+   * @return the numeric scale
+>>>>>>> mybatis-3-trunk/master
    */
   public Integer getNumericScale() {
     return numericScale;
@@ -174,8 +194,13 @@ public class ParameterMapping {
 
   /**
    * Used when setting parameters to the PreparedStatement.
+<<<<<<< HEAD
    * 
    * @return
+=======
+   *
+   * @return the type handler
+>>>>>>> mybatis-3-trunk/master
    */
   public TypeHandler<?> getTypeHandler() {
     return typeHandler;
@@ -183,8 +208,13 @@ public class ParameterMapping {
 
   /**
    * Used for handling output of callable statements.
+<<<<<<< HEAD
    * 
    * @return
+=======
+   *
+   * @return the result map id
+>>>>>>> mybatis-3-trunk/master
    */
   public String getResultMapId() {
     return resultMapId;
@@ -192,17 +222,28 @@ public class ParameterMapping {
 
   /**
    * Used for handling output of callable statements.
+<<<<<<< HEAD
    * 
    * @return
+=======
+   *
+   * @return the jdbc type name
+>>>>>>> mybatis-3-trunk/master
    */
   public String getJdbcTypeName() {
     return jdbcTypeName;
   }
 
   /**
+<<<<<<< HEAD
    * Not used
    * 
    * @return
+=======
+   * Expression 'Not used'.
+   *
+   * @return the expression
+>>>>>>> mybatis-3-trunk/master
    */
   public String getExpression() {
     return expression;

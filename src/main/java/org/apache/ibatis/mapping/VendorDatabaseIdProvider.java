@@ -99,21 +99,12 @@ public class VendorDatabaseIdProvider implements DatabaseIdProvider {
    * @throws SQLException
    */
   private String getDatabaseProductName(DataSource dataSource) throws SQLException {
-    Connection con = null;
-    try {
-      con = dataSource.getConnection();
+    try (Connection con = dataSource.getConnection()) {
       DatabaseMetaData metaData = con.getMetaData();
       //通过从 Connection 获得数据库产品名
       return metaData.getDatabaseProductName();
-    } finally {
-      if (con != null) {
-        try {
-          con.close();
-        } catch (SQLException e) {
-          // ignored
-        }
-      }
     }
+
   }
 
   private static class LogHolder {

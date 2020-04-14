@@ -1,4 +1,5 @@
 /**
+<<<<<<< HEAD
  * Copyright 2009-2018 the original author or authors.
  * <p>
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,6 +13,21 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
+=======
+ *    Copyright 2009-2020 the original author or authors.
+ *
+ *    Licensed under the Apache License, Version 2.0 (the "License");
+ *    you may not use this file except in compliance with the License.
+ *    You may obtain a copy of the License at
+ *
+ *       http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *    Unless required by applicable law or agreed to in writing, software
+ *    distributed under the License is distributed on an "AS IS" BASIS,
+ *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *    See the License for the specific language governing permissions and
+ *    limitations under the License.
+>>>>>>> mybatis-3-trunk/master
  */
 package org.apache.ibatis.reflection;
 
@@ -166,19 +182,27 @@ public class MetaClass {
       Invoker invoker = reflector.getGetInvoker(propertyName);
       // 如果 MethodInvoker 对象，则说明是 getting 方法，解析方法返回类型
       if (invoker instanceof MethodInvoker) {
-        Field _method = MethodInvoker.class.getDeclaredField("method");
-        _method.setAccessible(true);
-        Method method = (Method) _method.get(invoker);
+        Field declaredMethod = MethodInvoker.class.getDeclaredField("method");
+        declaredMethod.setAccessible(true);
+        Method method = (Method) declaredMethod.get(invoker);
         return TypeParameterResolver.resolveReturnType(method, reflector.getType());
+<<<<<<< HEAD
       }
       // 如果 GetFieldInvoker 对象，则说明是 field ，直接访问
       else if (invoker instanceof GetFieldInvoker) {
         Field _field = GetFieldInvoker.class.getDeclaredField("field");
         _field.setAccessible(true);
         Field field = (Field) _field.get(invoker);
+=======
+      } else if (invoker instanceof GetFieldInvoker) {
+        Field declaredField = GetFieldInvoker.class.getDeclaredField("field");
+        declaredField.setAccessible(true);
+        Field field = (Field) declaredField.get(invoker);
+>>>>>>> mybatis-3-trunk/master
         return TypeParameterResolver.resolveFieldType(field, reflector.getType());
       }
-    } catch (NoSuchFieldException | IllegalAccessException ignored) {
+    } catch (NoSuchFieldException | IllegalAccessException e) {
+      // Ignored
     }
     return null;
   }

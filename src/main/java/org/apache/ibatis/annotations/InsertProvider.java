@@ -1,5 +1,5 @@
 /**
- *    Copyright 2009-2019 the original author or authors.
+ *    Copyright 2009-2020 the original author or authors.
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -22,7 +22,29 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
+<<<<<<< HEAD
  * 插入语句提供器
+=======
+ * The annotation that specify a method that provide an SQL for inserting record(s).
+ *
+ * <p>
+ * <b>How to use:</b>
+ *
+ * <pre>
+ * public interface UserMapper {
+ *
+ *   &#064;InsertProvider(type = SqlProvider.class, method = "insert")
+ *   void insert(User user);
+ *
+ *   public static class SqlProvider {
+ *     public static String insert() {
+ *       return "INSERT INTO users (id, name) VALUES(#{id}, #{name})";
+ *     }
+ *   }
+ *
+ * }
+ * </pre>
+>>>>>>> mybatis-3-trunk/master
  *
  * @author Clinton Begin
  */
@@ -64,12 +86,24 @@ public @interface InsertProvider {
    * Since 3.5.1, this attribute can omit. If this attribute omit, the MyBatis will call a method that decide by
    * following rules.
    * <ul>
+<<<<<<< HEAD
    * <li>If class that specified the {@link #type()} attribute implements the
    * {@link org.apache.ibatis.builder.annotation.ProviderMethodResolver}, the MyBatis use a method that returned by it
    * </li>
    * <li>If cannot resolve a method by {@link org.apache.ibatis.builder.annotation.ProviderMethodResolver}(= not
    * implement it or it was returned {@code null}), the MyBatis will search and use a fallback method that named
    * {@code provideSql} from specified type</li>
+=======
+   *   <li>
+   *     If class that specified the {@link #type()} attribute implements the
+   *     {@link org.apache.ibatis.builder.annotation.ProviderMethodResolver},
+   *     the MyBatis use a method that returned by it
+   *   </li>
+   *   <li>
+   *     If cannot resolve a method by {@link org.apache.ibatis.builder.annotation.ProviderMethodResolver}(= not implement it or it was returned {@code null}),
+   *     the MyBatis will search and use a fallback method that named {@code provideSql} from specified type
+   *   </li>
+>>>>>>> mybatis-3-trunk/master
    * </ul>
    *
    * @return a method name of method for providing an SQL

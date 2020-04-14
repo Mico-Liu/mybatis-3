@@ -1,5 +1,5 @@
 /**
- *    Copyright 2009-2019 the original author or authors.
+ *    Copyright 2009-2020 the original author or authors.
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -15,6 +15,14 @@
  */
 package org.apache.ibatis.binding;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.sql.DataSource;
+
 import org.apache.ibatis.BaseDataTest;
 import org.apache.ibatis.domain.blog.Author;
 import org.apache.ibatis.domain.blog.Post;
@@ -27,6 +35,7 @@ import org.apache.ibatis.transaction.jdbc.JdbcTransactionFactory;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
+<<<<<<< HEAD
 import javax.sql.DataSource;
 import java.util.ArrayList;
 import java.util.List;
@@ -49,6 +58,27 @@ public class FlushTest {
     configuration.addMapper(BoundAuthorMapper.class);
     sqlSessionFactory = new SqlSessionFactoryBuilder().build(configuration);
   }
+=======
+class FlushTest {
+    private static SqlSessionFactory sqlSessionFactory;
+
+    @BeforeAll
+    static void setup() throws Exception {
+        DataSource dataSource = BaseDataTest.createBlogDataSource();
+        TransactionFactory transactionFactory = new JdbcTransactionFactory();
+        Environment environment = new Environment("Production", transactionFactory, dataSource);
+        Configuration configuration = new Configuration(environment);
+        configuration.setDefaultExecutorType(ExecutorType.BATCH);
+        configuration.getTypeAliasRegistry().registerAlias(Post.class);
+        configuration.getTypeAliasRegistry().registerAlias(Author.class);
+        configuration.addMapper(BoundAuthorMapper.class);
+        sqlSessionFactory = new SqlSessionFactoryBuilder().build(configuration);
+    }
+
+    @Test
+    void invokeFlushStatementsViaMapper() {
+        try (SqlSession session = sqlSessionFactory.openSession()) {
+>>>>>>> mybatis-3-trunk/master
 
   @Test
   public void invokeFlushStatementsViaMapper() {

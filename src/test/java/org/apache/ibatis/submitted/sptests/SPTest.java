@@ -200,8 +200,15 @@ class SPTest {
   }
 
   /*
+<<<<<<< HEAD
    * This test shows how to use a input and output parameters and return a result set from a stored procedure. This test
    * shows using a single value parameter.
+=======
+   * This test shows how to use an input and output parameters and return a
+   * result set from a stored procedure.
+   *
+   * This test shows using a single value parameter.
+>>>>>>> mybatis-3-trunk/master
    */
   @Test
   void testCallWithResultSet2() {
@@ -217,8 +224,15 @@ class SPTest {
   }
 
   /*
+<<<<<<< HEAD
    * This test shows how to use a input and output parameters and return a result set from a stored procedure. This test
    * shows using a Map parameter.
+=======
+   * This test shows how to use an input and output parameters and return a
+   * result set from a stored procedure.
+   *
+   * This test shows using a Map parameter.
+>>>>>>> mybatis-3-trunk/master
    */
   @Test
   void testCallWithResultSet3() {
@@ -240,8 +254,15 @@ class SPTest {
   }
 
   /*
+<<<<<<< HEAD
    * This test shows how to use a input and output parameters and return a result set from a stored procedure. This test
    * shows using a Map parameter.
+=======
+   * This test shows how to use an input and output parameters and return a
+   * result set from a stored procedure.
+   *
+   * This test shows using a Map parameter.
+>>>>>>> mybatis-3-trunk/master
    */
   @Test
   void testCallWithResultSet4() {
@@ -425,8 +446,17 @@ class SPTest {
   }
 
   /*
+<<<<<<< HEAD
    * This test shows how to use a input and output parameters and return a result set from a stored procedure. This test
    * shows using a single value parameter. This test shows using annotations for stored procedures
+=======
+   * This test shows how to use an input and output parameters and return a
+   * result set from a stored procedure.
+   *
+   * This test shows using a single value parameter.
+   *
+   * This test shows using annotations for stored procedures
+>>>>>>> mybatis-3-trunk/master
    */
   @Test
   void testCallWithResultSet2_a1() {
@@ -442,9 +472,19 @@ class SPTest {
   }
 
   /*
+<<<<<<< HEAD
    * This test shows how to use a input and output parameters and return a result set from a stored procedure. This test
    * shows using a single value parameter. This test shows using annotations for stored procedures and using a resultMap
    * in XML
+=======
+   * This test shows how to use an input and output parameters and return a
+   * result set from a stored procedure.
+   *
+   * This test shows using a single value parameter.
+   *
+   * This test shows using annotations for stored procedures and using a
+   * resultMap in XML
+>>>>>>> mybatis-3-trunk/master
    */
   @Test
   void testCallWithResultSet2_a2() {
@@ -455,4 +495,257 @@ class SPTest {
       parms.put("lowestId", 1);
       List<Name> names = spMapper.getNamesAnnotatedWithXMLResultMap(parms);
       assertEquals(3, names.size());
+<<<<<<< HEAD
       assert
+=======
+      assertEquals(3, parms.get("totalRows"));
+    }
+  }
+
+  /*
+   * This test shows how to use an input and output parameters and return a
+   * result set from a stored procedure.
+   *
+   * This test shows using a Map parameter.
+   *
+   * This test shows using annotations for stored procedures
+   */
+  @Test
+  void testCallWithResultSet3_a1() {
+    try (SqlSession sqlSession = sqlSessionFactory.openSession()) {
+      SPMapper spMapper = sqlSession.getMapper(SPMapper.class);
+
+      Map<String, Object> parms = new HashMap<>();
+      parms.put("lowestId", 2);
+      List<Name> names = spMapper.getNamesAnnotated(parms);
+      assertEquals(2, parms.get("totalRows"));
+      assertEquals(2, names.size());
+
+      parms = new HashMap<>();
+      parms.put("lowestId", 3);
+      names = spMapper.getNamesAnnotated(parms);
+      assertEquals(1, names.size());
+      assertEquals(1, parms.get("totalRows"));
+    }
+  }
+
+  /*
+   * This test shows how to use an input and output parameters and return a
+   * result set from a stored procedure.
+   *
+   * This test shows using a Map parameter.
+   *
+   * This test shows using annotations for stored procedures and using a
+   * resultMap in XML
+   */
+  @Test
+  void testCallWithResultSet3_a2() {
+    try (SqlSession sqlSession = sqlSessionFactory.openSession()) {
+      SPMapper spMapper = sqlSession.getMapper(SPMapper.class);
+
+      Map<String, Object> parms = new HashMap<>();
+      parms.put("lowestId", 2);
+      List<Name> names = spMapper.getNamesAnnotatedWithXMLResultMap(parms);
+      assertEquals(2, parms.get("totalRows"));
+      assertEquals(2, names.size());
+
+      parms = new HashMap<>();
+      parms.put("lowestId", 3);
+      names = spMapper.getNamesAnnotatedWithXMLResultMap(parms);
+      assertEquals(1, names.size());
+      assertEquals(1, parms.get("totalRows"));
+    }
+  }
+
+  /*
+   * This test shows how to use an input and output parameters and return a
+   * result set from a stored procedure.
+   *
+   * This test shows using a Map parameter.
+   *
+   * This test shows using annotations for stored procedures
+   */
+  @Test
+  void testCallWithResultSet4_a1() {
+    try (SqlSession sqlSession = sqlSessionFactory.openSession()) {
+      SPMapper spMapper = sqlSession.getMapper(SPMapper.class);
+
+      Map<String, Object> parms = new HashMap<>();
+      parms.put("lowestId", 2);
+      List<Name> names = spMapper.getNamesAnnotated(parms);
+      assertEquals(2, parms.get("totalRows"));
+      assertEquals(2, names.size());
+
+      parms = new HashMap<>();
+      parms.put("lowestId", 2);
+      names = spMapper.getNamesAnnotated(parms);
+      assertEquals(2, names.size());
+      assertEquals(2, parms.get("totalRows"));
+    }
+  }
+
+  /*
+   * This test shows how to use an input and output parameters and return a
+   * result set from a stored procedure.
+   *
+   * This test shows using a Map parameter.
+   *
+   * This test shows using annotations for stored procedures and using a
+   * resultMap in XML
+   */
+  @Test
+  void testCallWithResultSet4_a2() {
+    try (SqlSession sqlSession = sqlSessionFactory.openSession()) {
+      SPMapper spMapper = sqlSession.getMapper(SPMapper.class);
+
+      Map<String, Object> parms = new HashMap<>();
+      parms.put("lowestId", 2);
+      List<Name> names = spMapper.getNamesAnnotatedWithXMLResultMap(parms);
+      assertEquals(2, parms.get("totalRows"));
+      assertEquals(2, names.size());
+
+      parms = new HashMap<>();
+      parms.put("lowestId", 2);
+      names = spMapper.getNamesAnnotatedWithXMLResultMap(parms);
+      assertEquals(2, names.size());
+      assertEquals(2, parms.get("totalRows"));
+    }
+  }
+
+  /*
+   *
+   * This test shows using a two named parameters.
+   *
+   * This test shows using annotations for stored procedures and using a
+   * resultMap in XML
+   */
+  @Test
+  void testCallLowHighWithResultSet() {
+    try (SqlSession sqlSession = sqlSessionFactory.openSession()) {
+      SPMapper spMapper = sqlSession.getMapper(SPMapper.class);
+      List<Name> names = spMapper.getNamesAnnotatedLowHighWithXMLResultMap(1, 1);
+      assertEquals(1, names.size());
+    }
+  }
+
+  /*
+   * This test shows how to use the ARRAY JDBC type with MyBatis.
+   *
+   * This test shows using annotations for stored procedures
+   *
+   * @throws SQLException
+   */
+  @Test
+  void testGetNamesWithArray_a1() throws SQLException {
+    try (SqlSession sqlSession = sqlSessionFactory.openSession()) {
+      SPMapper spMapper = sqlSession.getMapper(SPMapper.class);
+
+      Array array = sqlSession.getConnection().createArrayOf("int", new Integer[] { 1, 2, 5 });
+
+      Map<String, Object> parms = new HashMap<>();
+      parms.put("ids", array);
+      List<Name> names = spMapper.getNamesWithArrayAnnotated(parms);
+      Object[] returnedIds = (Object[]) parms.get("returnedIds");
+      assertEquals(4, returnedIds.length);
+      assertEquals(3, parms.get("requestedRows"));
+      assertEquals(2, names.size());
+    }
+  }
+
+  /*
+   * This test shows how to use the ARRAY JDBC type with MyBatis.
+   *
+   * This test shows using annotations for stored procedures and using a
+   * resultMap in XML
+   *
+   * @throws SQLException
+   */
+  @Test
+  void testGetNamesWithArray_a2() throws SQLException {
+    try (SqlSession sqlSession = sqlSessionFactory.openSession()) {
+      SPMapper spMapper = sqlSession.getMapper(SPMapper.class);
+
+      Array array = sqlSession.getConnection().createArrayOf("int", new Integer[] { 1, 2, 5 });
+
+      Map<String, Object> parms = new HashMap<>();
+      parms.put("ids", array);
+      List<Name> names = spMapper.getNamesWithArrayAnnotatedWithXMLResultMap(parms);
+      Object[] returnedIds = (Object[]) parms.get("returnedIds");
+      assertEquals(4, returnedIds.length);
+      assertEquals(3, parms.get("requestedRows"));
+      assertEquals(2, names.size());
+    }
+  }
+
+  /*
+   * This test shows how to call procedures that return multiple result sets
+   *
+   * This test shows using annotations for stored procedures and referring to
+   * multiple resultMaps in XML
+   *
+   * @throws SQLException
+   */
+  @Test
+  void testGetNamesAndItems_a2() {
+    try (SqlSession sqlSession = sqlSessionFactory.openSession()) {
+      SPMapper spMapper = sqlSession.getMapper(SPMapper.class);
+
+      List<List<?>> results = spMapper.getNamesAndItemsAnnotatedWithXMLResultMap();
+      assertEquals(2, results.size());
+      assertEquals(4, results.get(0).size());
+      assertEquals(3, results.get(1).size());
+    }
+  }
+
+  @Test
+  void testGetNamesAndItems_a3() {
+    try (SqlSession sqlSession = sqlSessionFactory.openSession()) {
+      SPMapper spMapper = sqlSession.getMapper(SPMapper.class);
+
+      List<List<?>> results = spMapper.getNamesAndItemsAnnotatedWithXMLResultMapArray();
+      assertEquals(2, results.size());
+      assertEquals(4, results.get(0).size());
+      assertEquals(3, results.get(1).size());
+    }
+  }
+
+  @Test
+  void testGetNamesAndItemsLinked() {
+    try (SqlSession sqlSession = sqlSessionFactory.openSession()) {
+      SPMapper spMapper = sqlSession.getMapper(SPMapper.class);
+
+      List<Name> names = spMapper.getNamesAndItemsLinked();
+      assertEquals(4, names.size());
+      assertEquals(2, names.get(0).getItems().size());
+      assertEquals(1, names.get(1).getItems().size());
+      assertNull(names.get(2).getItems());
+      assertNull(names.get(3).getItems());
+    }
+  }
+
+  @Test
+  void testGetNamesAndItemsLinkedWithNoMatchingInfo() {
+    try (SqlSession sqlSession = sqlSessionFactory.openSession()) {
+      SPMapper spMapper = sqlSession.getMapper(SPMapper.class);
+
+      List<Name> names = spMapper.getNamesAndItemsLinkedById(0);
+      assertEquals(1, names.size());
+      assertEquals(2, names.get(0).getItems().size());
+    }
+  }
+
+  @Test
+  void testMultipleForeignKeys() {
+    try (SqlSession sqlSession = sqlSessionFactory.openSession()) {
+      SPMapper spMapper = sqlSession.getMapper(SPMapper.class);
+      List<Book> books = spMapper.getBookAndGenre();
+      assertEquals("Book1", books.get(0).getName());
+      assertEquals("Genre1", books.get(0).getGenre().getName());
+      assertEquals("Book2", books.get(1).getName());
+      assertEquals("Genre2", books.get(1).getGenre().getName());
+      assertEquals("Book3", books.get(2).getName());
+      assertEquals("Genre1", books.get(2).getGenre().getName());
+    }
+  }
+}
+>>>>>>> mybatis-3-trunk/master

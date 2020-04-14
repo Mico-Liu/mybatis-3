@@ -1,5 +1,5 @@
 /**
- *    Copyright 2009-2019 the original author or authors.
+ *    Copyright 2009-2020 the original author or authors.
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -17,18 +17,19 @@ package org.apache.ibatis.parsing;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Reader;
 
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+
 import org.apache.ibatis.builder.BuilderException;
 import org.apache.ibatis.io.Resources;
 import org.junit.jupiter.api.Test;
 import org.w3c.dom.Document;
-import org.xml.sax.*;
+import org.xml.sax.InputSource;
 
 class XPathParserTest {
   private String resource = "resources/nodelet_test.xml";
@@ -191,6 +192,51 @@ class XPathParserTest {
     XNode node = parser.evalNode("/employee/height");
     assertEquals("employee/height", node.getPath());
     assertEquals("employee[${id_var}]_height", node.getValueBasedIdentifier());
+  }
+
+  @Test
+  void formatXNodeToString() {
+    XPathParser parser = new XPathParser("<users><user><id>100</id><name>Tom</name><age>30</age><cars><car>BMW</car><car>Audi</car><car>Benz</car></cars></user></users>");
+    String usersNodeToString = parser.evalNode("/users").toString();
+    String userNodeToString = parser.evalNode("/users/user").toString();
+    String carsNodeToString = parser.evalNode("/users/user/cars").toString();
+
+    String usersNodeToStringExpect =
+      "<users>\n" +
+      "    <user>\n" +
+      "        <id>100</id>\n" +
+      "        <name>Tom</name>\n" +
+      "        <age>30</age>\n" +
+      "        <cars>\n" +
+      "            <car>BMW</car>\n" +
+      "            <car>Audi</car>\n" +
+      "            <car>Benz</car>\n" +
+      "        </cars>\n" +
+      "    </user>\n" +
+      "</users>\n";
+
+    String userNodeToStringExpect =
+      "<user>\n" +
+      "    <id>100</id>\n" +
+      "    <name>Tom</name>\n" +
+      "    <age>30</age>\n" +
+      "    <cars>\n" +
+      "        <car>BMW</car>\n" +
+      "        <car>Audi</car>\n" +
+      "        <car>Benz</car>\n" +
+      "    </cars>\n" +
+      "</user>\n";
+
+  String carsNodeToStringExpect =
+      "<cars>\n" +
+      "    <car>BMW</car>\n" +
+      "    <car>Audi</car>\n" +
+      "    <car>Benz</car>\n" +
+      "</cars>\n";
+
+    assertEquals(usersNodeToStringExpect, usersNodeToString);
+    assertEquals(userNodeToStringExpect, userNodeToString);
+    assertEquals(carsNodeToStringExpect, carsNodeToString);
   }
 
 }

@@ -45,19 +45,17 @@ public class StatementUtil {
    * @throws SQLException
    *           if a database access error occurs, this method is called on a closed <code>Statement</code>
    */
+<<<<<<< HEAD
   public static void applyTransactionTimeout(Statement statement, Integer queryTimeout, Integer transactionTimeout)
       throws SQLException {
+=======
+  public static void applyTransactionTimeout(Statement statement, Integer queryTimeout, Integer transactionTimeout) throws SQLException {
+>>>>>>> mybatis-3-trunk/master
     if (transactionTimeout == null) {
       return;
     }
-    Integer timeToLiveOfQuery = null;
-    if (queryTimeout == null || queryTimeout == 0) {
-      timeToLiveOfQuery = transactionTimeout;
-    } else if (transactionTimeout < queryTimeout) {
-      timeToLiveOfQuery = transactionTimeout;
-    }
-    if (timeToLiveOfQuery != null) {
-      statement.setQueryTimeout(timeToLiveOfQuery);
+    if (queryTimeout == null || queryTimeout == 0 || transactionTimeout < queryTimeout) {
+      statement.setQueryTimeout(transactionTimeout);
     }
   }
 

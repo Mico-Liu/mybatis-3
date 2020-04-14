@@ -22,8 +22,10 @@ import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.Supplier;
 
 import org.apache.ibatis.io.Resources;
+import org.apache.ibatis.session.Configuration;
 
 /**
  * 继承 BaseTypeHandler 抽象类，未知的 TypeHandler 实现类。通过获取对应的 TypeHandler ，进行处理
@@ -36,14 +38,37 @@ public class UnknownTypeHandler extends BaseTypeHandler<Object> {
    * ObjectTypeHandler 单例
    */
   private static final ObjectTypeHandler OBJECT_TYPE_HANDLER = new ObjectTypeHandler();
+  // TODO Rename to 'configuration' after removing the 'configuration' property(deprecated property) on parent class
+  private final Configuration config;
+  private final Supplier<TypeHandlerRegistry> typeHandlerRegistrySupplier;
 
   /**
+<<<<<<< HEAD
    * TypeHandler 注册表
    */
   private TypeHandlerRegistry typeHandlerRegistry;
+=======
+   * The constructor that pass a MyBatis configuration.
+   *
+   * @param configuration a MyBatis configuration
+   * @since 3.5.4
+   */
+  public UnknownTypeHandler(Configuration configuration) {
+    this.config = configuration;
+    this.typeHandlerRegistrySupplier = configuration::getTypeHandlerRegistry;
+  }
+>>>>>>> mybatis-3-trunk/master
 
+  /**
+   * The constructor that pass the type handler registry.
+   *
+   * @param typeHandlerRegistry a type handler registry
+   * @deprecated Since 3.5.4, please use the {@link #UnknownTypeHandler(Configuration)}.
+   */
+  @Deprecated
   public UnknownTypeHandler(TypeHandlerRegistry typeHandlerRegistry) {
-    this.typeHandlerRegistry = typeHandlerRegistry;
+    this.config = new Configuration();
+    this.typeHandlerRegistrySupplier = () -> typeHandlerRegistry;
   }
 
   @Override
@@ -85,7 +110,7 @@ public class UnknownTypeHandler extends BaseTypeHandler<Object> {
     if (parameter == null) {
       handler = OBJECT_TYPE_HANDLER;
     } else {
-      handler = typeHandlerRegistry.getTypeHandler(parameter.getClass(), jdbcType);
+      handler = typeHandlerRegistrySupplier.get().getTypeHandler(parameter.getClass(), jdbcType);
       // check if handler is null (issue #270)
       // 获取不到，则使用 OBJECT_TYPE_HANDLER
       if (handler == null || handler instanceof UnknownTypeHandler) {
@@ -103,9 +128,15 @@ public class UnknownTypeHandler extends BaseTypeHandler<Object> {
       // 通过 metaData
       ResultSetMetaData rsmd = rs.getMetaData();
       int count = rsmd.getColumnCount();
+      boolean useColumnLabel = config.isUseColumnLabel();
       for (int i = 1; i <= count; i++) {
+<<<<<<< HEAD
         String name = rsmd.getColumnName(i);
         columnIndexLookup.put(name, i);
+=======
+        String name = useColumnLabel ? rsmd.getColumnLabel(i) : rsmd.getColumnName(i);
+        columnIndexLookup.put(name,i);
+>>>>>>> mybatis-3-trunk/master
       }
       Integer columnIndex = columnIndexLookup.get(column);
       TypeHandler<?> handler = null;
@@ -131,11 +162,11 @@ public class UnknownTypeHandler extends BaseTypeHandler<Object> {
     Class<?> javaType = safeGetClassForColumn(rsmd, columnIndex);
     //获得对应的 TypeHandler 对象
     if (javaType != null && jdbcType != null) {
-      handler = typeHandlerRegistry.getTypeHandler(javaType, jdbcType);
+      handler = typeHandlerRegistrySupplier.get().getTypeHandler(javaType, jdbcType);
     } else if (javaType != null) {
-      handler = typeHandlerRegistry.getTypeHandler(javaType);
+      handler = typeHandlerRegistrySupplier.get().getTypeHandler(javaType);
     } else if (jdbcType != null) {
-      handler = typeHandlerRegistry.getTypeHandler(jdbcType);
+      handler = typeHandlerRegistrySupplier.get().getTypeHandler(jdbcType);
     }
     return handler;
   }

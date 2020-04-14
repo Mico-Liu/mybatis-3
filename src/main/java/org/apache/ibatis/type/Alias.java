@@ -1,5 +1,5 @@
 /**
- *    Copyright 2009-2016 the original author or authors.
+ *    Copyright 2009-2020 the original author or authors.
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -22,8 +22,21 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
+<<<<<<< HEAD
  * 别名的注解
  *
+=======
+ * The annotation that specify alias name.
+ *
+ * <p>
+ * <b>How to use:</b>
+ * <pre>
+ * &#064;Alias("Email")
+ * public class UserEmail {
+ *   // ...
+ * }
+ * </pre>
+>>>>>>> mybatis-3-trunk/master
  * @author Clinton Begin
  */
 @Documented
@@ -31,7 +44,13 @@ import java.lang.annotation.Target;
 @Target(ElementType.TYPE)// 注册到类
 public @interface Alias {
   /**
+<<<<<<< HEAD
    * @return 别名
+=======
+   * Return the alias name.
+   *
+   * @return the alias name
+>>>>>>> mybatis-3-trunk/master
    */
   String value();
 }

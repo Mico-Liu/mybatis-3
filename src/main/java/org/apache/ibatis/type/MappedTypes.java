@@ -1,5 +1,5 @@
 /**
- *    Copyright 2009-2016 the original author or authors.
+ *    Copyright 2009-2020 the original author or authors.
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -22,8 +22,21 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
+<<<<<<< HEAD
  * 匹配的 Java Type 类型的注解
  *
+=======
+ * The annotation that specify java types to map {@link TypeHandler}.
+ *
+ * <p>
+ * <b>How to use:</b>
+ * <pre>
+ * &#064;MappedTypes(String.class)
+ * public class StringTrimmingTypeHandler implements TypeHandler&lt;String&gt; {
+ *   // ...
+ * }
+ * </pre>
+>>>>>>> mybatis-3-trunk/master
  * @author Eduardo Macarron
  */
 @Documented
@@ -31,7 +44,13 @@ import java.lang.annotation.Target;
 @Target(ElementType.TYPE)// 注册到类
 public @interface MappedTypes {
   /**
+<<<<<<< HEAD
    * @return 匹配的 Java Type 类型的数组
+=======
+   * Returns java types to map {@link TypeHandler}.
+   *
+   * @return java types
+>>>>>>> mybatis-3-trunk/master
    */
   Class<?>[] value();
 }

@@ -1,5 +1,5 @@
 /**
- *    Copyright 2009-2019 the original author or authors.
+ *    Copyright 2009-2020 the original author or authors.
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -37,6 +37,7 @@ public interface SqlSession extends Closeable {
    * @param <T>
    *          the returned object type
    * @param statement
+   *          the statement
    * @return Mapped object
    */
   <T> T selectOne(String statement);
@@ -211,9 +212,17 @@ public interface SqlSession extends Closeable {
   /**
    * Retrieve a single row mapped from the statement key and parameter using a {@code ResultHandler} and
    * {@code RowBounds}.
+<<<<<<< HEAD
    * 
    * @param statement
    *          Unique identifier matching the statement to use.
+=======
+   *
+   * @param statement
+   *          Unique identifier matching the statement to use.
+   * @param parameter
+   *          the parameter
+>>>>>>> mybatis-3-trunk/master
    * @param rowBounds
    *          RowBound instance to limit the query results
    * @param handler

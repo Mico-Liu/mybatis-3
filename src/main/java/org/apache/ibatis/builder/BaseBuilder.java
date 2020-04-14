@@ -166,9 +166,13 @@ public abstract class BaseBuilder {
       return null;
     }
     try {
+<<<<<<< HEAD
       // <2> 创建对象
       // 这里重复获得了一次
       return resolveClass(alias).getDeclaredConstructor().newInstance();
+=======
+      return clazz.getDeclaredConstructor().newInstance();
+>>>>>>> mybatis-3-trunk/master
     } catch (Exception e) {
       throw new BuilderException("Error creating instance. Cause: " + e, e);
     }

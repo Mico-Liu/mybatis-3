@@ -32,10 +32,15 @@ public class PerpetualCache implements Cache {
    * 标识
    */
   private final String id;
+<<<<<<< HEAD
   /**
    * 缓存容器
    */
   private Map<Object, Object> cache = new HashMap<>();
+=======
+
+  private final Map<Object, Object> cache = new HashMap<>();
+>>>>>>> mybatis-3-trunk/master
 
   public PerpetualCache(String id) {
     this.id = id;

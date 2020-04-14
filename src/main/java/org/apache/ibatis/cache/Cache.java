@@ -1,4 +1,5 @@
 /**
+<<<<<<< HEAD
  * Copyright 2009-2019 the original author or authors.
  * <p>
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,6 +13,21 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
+=======
+ *    Copyright 2009-2020 the original author or authors.
+ *
+ *    Licensed under the Apache License, Version 2.0 (the "License");
+ *    you may not use this file except in compliance with the License.
+ *    You may obtain a copy of the License at
+ *
+ *       http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *    Unless required by applicable law or agreed to in writing, software
+ *    distributed under the License is distributed on an "AS IS" BASIS,
+ *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *    See the License for the specific language governing permissions and
+ *    limitations under the License.
+>>>>>>> mybatis-3-trunk/master
  */
 package org.apache.ibatis.cache;
 
@@ -47,17 +63,29 @@ public interface Cache {
   String getId();
 
   /**
+<<<<<<< HEAD
    * 添加指定键的值
    *
    * @param key   Can be any object but usually it is a {@link CacheKey}
    * @param value The result of a select.
+=======
+   * @param key
+   *          Can be any object but usually it is a {@link CacheKey}
+   * @param value
+   *          The result of a select.
+>>>>>>> mybatis-3-trunk/master
    */
   void putObject(Object key, Object value);
 
   /**
+<<<<<<< HEAD
    * 获得指定键的值
    *
    * @param key The key
+=======
+   * @param key
+   *          The key
+>>>>>>> mybatis-3-trunk/master
    * @return The object stored in the cache.
    */
   Object getObject(Object key);
@@ -70,7 +98,8 @@ public interface Cache {
    * when a value is null and releases it when the value is back again. This way other threads will wait for the value
    * to be available instead of hitting the database.
    *
-   * @param key The key
+   * @param key
+   *          The key
    * @return Not used
    */
   Object removeObject(Object key);
